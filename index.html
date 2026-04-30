@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>STTS Daily Inspection – 46+29 Items</title>
+    <title>STTS Daily Inspection</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #e9f0ee; font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif; padding: 24px 16px; }
@@ -15,12 +15,25 @@
         .meta-item { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
         .meta-item label { font-weight: 700; color: #00695c; font-size: 0.85rem; }
         .required-star { color: #c62828; }
-        input, select, textarea { padding: 8px 16px; border-radius: 40px; border: 1px solid #cbdcd6; background: white; font-family: 'Courier New', monospace; font-weight: 500; font-size: 0.85rem; }
         
-        /* 关键修复：占位符样式不影响输入框，输入时自动消失是浏览器原生行为 */
-        input::placeholder, textarea::placeholder { color: #9e9e9e; font-style: italic; font-weight: 400; opacity: 0.85; }
-        /* 移除 text-transform，改用 JS 转换大写，这样 placeholder 不会被强制大写且会正常消失 */
+        /* 关键：占位符样式 - 灰色斜体，输入时自动消失是浏览器原生行为 */
+        input::placeholder, textarea::placeholder { 
+            color: #9e9e9e !important; 
+            font-style: italic !important; 
+            font-weight: 400 !important; 
+            opacity: 0.85 !important;
+            text-transform: none !important;
+        }
         
+        input, select, textarea { 
+            padding: 8px 16px; 
+            border-radius: 40px; 
+            border: 1px solid #cbdcd6; 
+            background: white; 
+            font-family: 'Courier New', monospace; 
+            font-weight: 500; 
+            font-size: 0.85rem; 
+        }
         textarea { border-radius: 20px; }
         .section { margin-top: 2px; }
         .section-title { background: #e0f2f1; padding: 12px 28px; font-weight: 800; font-size: 1.1rem; color: #004d40; border-left: 6px solid #00897b; margin-top: 8px; }
@@ -44,27 +57,27 @@
 <div class="form-container">
     <div class="doc-header">
         <h1>STTS DAILY INSPECTION FORM</h1>
-        <div class="sub"><span>CONTRACT EP/SP/76/14 | DOIF-STTS-002-V2</span><span>SHA TIN TRANSFER STATION</span></div>
+        <div class="sub"><span>CONTRACT EP/SP/76/14 | DOIF-STTS-002-V2</span><span></div>
     </div>
 
     <div class="meta-bar">
         <div class="meta-item"><label>📅 INSPECTION DATE <span class="required-star">*</span></label><input type="date" id="inspectDate" value="2026-03-28"></div>
-        <div class="meta-item"><label>👤 INSPECTED BY <span class="required-star">*</span></label><input type="text" id="inspectedBy" value="I(TD)41" placeholder="e.g. i21 or I(TD)21"></div>
+        <div class="meta-item"><label>👤 INSPECTED BY <span class="required-star">*</span></label><input type="text" id="inspectedBy" placeholder="e.g. i21 or I(TD)21"></div>
         <div class="meta-item"><label>⏱️ SHIFT / TIME <span class="required-star">*</span></label><select id="shiftSelect"><option value="08:00">08:00</option><option value="13:00">13:00</option><option value="19:00">19:00</option></select></div>
-        <div class="meta-item"><label>🌦️ WEATHER</label><select id="weatherSel"><option value="CLOUDY">CLOUDY</option><option value="FINE">FINE</option><option value="RAINY">RAINY</option><option value="SUNNY">SUNNY</option></select></div>
+        <div class="meta-item"><label>🌦️ WEATHER</label><select id="weatherSel"><option value="SUNNY">SUNNY</option><option value="FINE">FINE</option><option value="RAINY">RAINY</option><option value="CLOUDY">CLOUDY</option></select></div>
         <div class="auto-save-badge" id="autoSaveBadge">💾 Auto-saved</div>
     </div>
 
     <form id="inspectionForm">
         <!-- WATER & WEIGHBRIDGE (1-11) -->
         <div class="section"><div class="section-title">💧 WATER CONSUMPTION & WEIGHBRIDGE (1-11)</div>
-            <div class="field-row"><span class="label">1. INDUSTRIAL WATER METER READING</span><div class="input-area"><input type="text" name="item_01" value="46517" placeholder="ENTER METER READING"></div></div>
-            <div class="field-row"><span class="label">2. WASTEWATER FLOW METER READING</span><div class="input-area"><input type="text" name="item_02" value="64920" placeholder="ENTER FLOW READING"></div></div>
+            <div class="field-row"><span class="label">1. INDUSTRIAL WATER METER READING</span><div class="input-area"><input type="text" name="item_01" placeholder="ENTER METER READING"></div></div>
+            <div class="field-row"><span class="label">2. WASTEWATER FLOW METER READING</span><div class="input-area"><input type="text" name="item_02" placeholder="ENTER FLOW READING"></div></div>
             <div class="field-row"><span class="label">3. WEIGHBRIDGE CPU</span><div class="input-area"><select name="item_03"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
             <div class="field-row"><span class="label">4. STATUS OF WEIGHBRIDGE (NO.1/2/3)</span><div class="inline-cluster"><select name="item_04a"><option value="Y">No.1 Y</option><option value="X">X</option></select><select name="item_04b"><option value="Y">No.2 Y</option><option value="X">X</option></select><select name="item_04c"><option value="Y">No.3 Y</option><option value="X">X</option></select></div></div>
             <div class="field-row"><span class="label">5. DROP BARRIER / TRAFFIC LIGHT</span><div class="inline-cluster"><select name="item_05a"><option value="Y">No.1 Y</option><option value="X">X</option></select><select name="item_05b"><option value="Y">No.2 Y</option><option value="X">X</option></select><select name="item_05c"><option value="Y">No.3 Y</option><option value="X">X</option></select></div></div>
             <div class="field-row"><span class="label">6. CCTV (IN / OUT) - 3 CAMERAS</span><div class="cctv-group"><div class="cctv-unit">NO.1 IN:<select name="item_06a_in"><option value="Y">Y</option><option value="X">X</option></select> OUT:<select name="item_06a_out"><option value="Y">Y</option><option value="X">X</option></select></div><div class="cctv-unit">NO.2 IN:<select name="item_06b_in"><option value="Y">Y</option><option value="X">X</option></select> OUT:<select name="item_06b_out"><option value="Y">Y</option><option value="X">X</option></select></div><div class="cctv-unit">NO.3 IN:<select name="item_06c_in"><option value="Y">Y</option><option value="X">X</option></select> OUT:<select name="item_06c_out"><option value="Y">Y</option><option value="X">X</option></select></div></div></div>
-            <div class="field-row"><span class="label">7. NO. OF WEIGHBRIDGE OPERATOR</span><div class="input-area"><input type="text" name="item_07" value="2" placeholder="NUMBER OF OPERATORS"></div></div>
+            <div class="field-row"><span class="label">7. NO. OF WEIGHBRIDGE OPERATOR</span><div class="input-area"><input type="text" name="item_07" placeholder="NUMBER OF OPERATORS"></div></div>
             <div class="field-row"><span class="label">8. VOID OR MANUAL TICKET</span><div class="input-area"><select name="item_08"><option value="N">N</option><option value="Y">Y</option></select></div></div>
             <div class="field-row"><span class="label">9. WATER SPRAYING / BRUSHING</span><div class="input-area"><select name="item_09"><option value="Y">Y</option><option value="N">N</option><option value="NA">NA</option></select></div></div>
             <div class="field-row"><span class="label">10. DROP BARRIER / TRAFFIC LIGHT (VWP)</span><div class="input-area"><select name="item_10"><option value="Y">Y</option><option value="N">N</option><option value="NA">NA</option></select></div></div>
@@ -75,8 +88,8 @@
         <div class="section"><div class="section-title">🏗️ TIPPING HALL & COMPACTOR AREA (12-22)</div>
             <div class="field-row"><span class="label">12. LIVE FLOOR (NO.1/2/3)</span><div class="inline-cluster"><select name="item_12a"><option value="Y">NO.1 Y</option><option value="X">X</option></select><select name="item_12b"><option value="Y">NO.2 Y</option><option value="X">X</option></select><select name="item_12c"><option value="X">NO.3 X</option><option value="Y">Y</option></select></div></div>
             <div class="field-row"><span class="label">13. VENTILATION FAN (NO.1/2)</span><div class="inline-cluster"><select name="item_13a"><option value="Y">V1 Y</option><option value="X">X</option></select><select name="item_13b"><option value="Y">V2 Y</option><option value="X">X</option></select></div></div>
-            <div class="field-row"><span class="label">14A. CONTROL OPERATOR (COUNT)</span><div class="input-area"><input type="text" name="item_14a" value="2" placeholder="OPERATOR COUNT"></div></div>
-            <div class="field-row"><span class="label">14B. TIPPER HALL ASSISTANT</span><div class="input-area"><input type="text" name="item_14b" value="1" placeholder="ASSISTANT COUNT"></div></div>
+            <div class="field-row"><span class="label">14A. CONTROL OPERATOR (COUNT)</span><div class="input-area"><input type="text" name="item_14a" placeholder="OPERATOR COUNT"></div></div>
+            <div class="field-row"><span class="label">14B. TIPPER HALL ASSISTANT</span><div class="input-area"><input type="text" name="item_14b" placeholder="ASSISTANT COUNT"></div></div>
             <div class="field-row"><span class="label">15. LIGHTING (TH)</span><div class="input-area"><select name="item_15"><option value="Y">Y</option><option value="N">N</option></select></div></div>
             <div class="field-row"><span class="label">16. FIRE EXTINGUISHER STATUS</span><div class="input-area"><select name="item_16"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
             <div class="field-row"><span class="label">17. EMERGENCY STOP BUTTON</span><div class="input-area"><select name="item_17"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
@@ -110,7 +123,7 @@
             <div class="field-row"><span class="label">41. PEST CONTROL</span><div class="input-area"><select name="item_41"><option value="Y">Y (ACTIVE)</option><option value="X">X (INACTIVE)</option></select></div></div>
             <div class="field-row"><span class="label">42. SAFETY SIGNAGE</span><div class="input-area"><select name="item_42"><option value="Y">Y (GOOD)</option><option value="X">X (DAMAGED)</option></select></div></div>
             <div class="field-row"><span class="label">43. RADIO SYSTEM</span><div class="input-area"><select name="item_43"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">44. GENERATOR FUEL</span><div class="input-area"><input type="text" name="item_44" value="80%" placeholder="PERCENTAGE"></div></div>
+            <div class="field-row"><span class="label">44. GENERATOR FUEL</span><div class="input-area"><input type="text" name="item_44" placeholder="PERCENTAGE (e.g. 80%)"></div></div>
             <div class="field-row"><span class="label">45. UV TREATMENT</span><div class="input-area"><select name="item_45"><option value="Y">Y (NORMAL)</option><option value="X">X (FAULT)</option></select></div></div>
             <div class="field-row"><span class="label">46. AIR COMPRESSOR</span><div class="input-area"><select name="item_46"><option value="Y">Y (RUNNING)</option><option value="X">X (STOP)</option></select></div></div>
         </div>
@@ -125,13 +138,13 @@
             <div class="field-row"><span class="label">OEP-6: ABNORMAL NOISE</span><select name="oep6"><option value="N">N</option><option value="Y">Y</option></select></div>
             <div class="field-row"><span class="label">OEP-7: WASTE INSPECTION (DEFECT REPORT)</span><select name="oep7"><option value="N">N</option><option value="Y">Y</option></select></div>
             <div class="field-row"><span class="label">OEP-8: CLEANSING AREA (4X/DAY PERFORMED)</span><select name="oep8"><option value="Y">Y</option><option value="N">N</option></select></div>
-            <div class="field-row"><span class="label">OEP-9: HIGHWAY TRACTOR (OPERATE/IDLE)</span><input type="text" name="oep9" value="16 / 8" placeholder="E.G. 16 / 8"></div>
-            <div class="field-row"><span class="label">OEP-10: HIGHWAY TRACTOR IN MAINTENANCE (ST#)</span><input type="text" name="oep10" value="ST22" placeholder="UNIT NUMBERS"></div>
-            <div class="field-row"><span class="label">OEP-11: YARD TRACTOR (OPERATE/MAINT/IDLE)</span><input type="text" name="oep11" value="2 / 0 / 1" placeholder="e.g. 2/0/1"></div>
-            <div class="field-row"><span class="label">OEP-12: TRAILER (C#) IN MAINTENANCE</span><input type="text" name="oep12" value="C22,C25" placeholder="LIST"></div>
+            <div class="field-row"><span class="label">OEP-9: HIGHWAY TRACTOR (OPERATE/IDLE)</span><input type="text" name="oep9" placeholder="E.G. 16 / 8"></div>
+            <div class="field-row"><span class="label">OEP-10: HIGHWAY TRACTOR IN MAINTENANCE (ST#)</span><input type="text" name="oep10" placeholder="UNIT NUMBERS (e.g. ST22)"></div>
+            <div class="field-row"><span class="label">OEP-11: YARD TRACTOR (OPERATE/MAINT/IDLE)</span><input type="text" name="oep11" placeholder="e.g. 2 / 0 / 1"></div>
+            <div class="field-row"><span class="label">OEP-12: TRAILER (C#) IN MAINTENANCE</span><input type="text" name="oep12" placeholder="LIST (e.g. C22,C25)"></div>
             <div class="field-row"><span class="label">OEP-13: CLEANLINESS OF TRACTORS & TRAILERS</span><select name="oep13"><option value="Y">Y</option><option value="N">N</option></select></div>
-            <div class="field-row"><span class="label">OEP-14: BOBCAT / SWEEPER / SCRUBBER DRIER</span><input type="text" name="oep14" value="N / N / N" placeholder="STATUS"></div>
-            <div class="field-row"><span class="label">OEP-15: BACKHOE LOADER (JCB) OPERATING AT TH</span><input type="text" name="oep15" value="2" placeholder="COUNT"></div>
+            <div class="field-row"><span class="label">OEP-14: BOBCAT / SWEEPER / SCRUBBER DRIER</span><input type="text" name="oep14" placeholder="STATUS (e.g. N / N / N)"></div>
+            <div class="field-row"><span class="label">OEP-15: BACKHOE LOADER (JCB) OPERATING AT TH</span><input type="text" name="oep15" placeholder="COUNT"></div>
             <div class="field-row"><span class="label">OEP-16: STORM DRAIN / CATCHPIT</span><select name="oep16"><option value="Y">Y</option><option value="N">N</option></select></div>
             <div class="field-row"><span class="label">OEP-17: WASTEWATER SAMPLE</span><input type="text" name="oep17" placeholder="ALS / EPD / TIME"></div>
             <div class="field-row"><span class="label">OEP-18: STORM WATER SAMPLE</span><input type="text" name="oep18" placeholder="ALS/EPD / TIME"></div>
@@ -140,9 +153,9 @@
             <div class="field-row"><span class="label">OEP-21: RSP (BOUNDARY/HALL)</span><input type="text" name="oep21" placeholder="ALS / TIME"></div>
             <div class="field-row"><span class="label">OEP-22: NOISE MEASUREMENT</span><input type="text" name="oep22" placeholder="ALS / TIME"></div>
             <div class="field-row"><span class="label">OEP-23: CO & NO2 (HALL)</span><input type="text" name="oep23" placeholder="ALS / TIME"></div>
-            <div class="field-row"><span class="label">OEP-24: ODOUR PATROL (0-4)</span><input type="text" name="oep24" value="0" placeholder="0=NOT DETECTED"></div>
+            <div class="field-row"><span class="label">OEP-24: ODOUR PATROL (0-4)</span><input type="text" name="oep24" placeholder="0=NOT DETECTED"></div>
             <div class="field-row"><span class="label">OEP-25: PEST BREEDING PLACES</span><input type="text" name="oep25" placeholder="NO / N/A"></div>
-            <div class="field-row"><span class="label">OEP-26: PEST CONTROL (FOGGING TIME)</span><input type="text" name="oep26" value="15:40" placeholder="TIME"></div>
+            <div class="field-row"><span class="label">OEP-26: PEST CONTROL (FOGGING TIME)</span><input type="text" name="oep26" placeholder="TIME (e.g. 15:40)"></div>
             <div class="field-row"><span class="label">OEP-27: BLACK SMOKE</span><select name="oep27"><option value="N">N</option><option value="Y">Y (TIME)</option></select></div>
             <div class="field-row"><span class="label">OEP-28: MANAGER PRESENT</span><select name="oep28"><option value="N">N</option><option value="Y">Y</option></select></div>
             <div class="field-row"><span class="label">OEP-29: VISITOR RECORD</span><input type="text" name="oep29" placeholder="NONE / DETAILS"></div>
@@ -150,37 +163,40 @@
 
         <!-- RCV SPOT CHECK -->
         <div class="section"><div class="section-title">🚛 RCV SPOT CHECK</div>
-            <div class="field-row"><span class="label">RCV VEHICLE NO(S).</span><div class="input-area"><input type="text" name="rcv_vehicle" value="XP6256, WJ3668" placeholder="VEHICLE NUMBERS"></div></div>
-            <div class="field-row"><span class="label">VEHICLE TYPE</span><div class="input-area"><input type="text" name="rcv_type" value="F, B" placeholder="TYPE CODE"></div></div>
-            <div class="field-row"><span class="label">WASTE TYPE CODE</span><div class="input-area"><input type="text" name="rcv_waste_type" value="D01.01, D01.00" placeholder="WASTE CODE"></div></div>
-            <div class="field-row"><span class="label">TICKET NUMBER(S)</span><div class="input-area"><input type="text" name="rcv_ticket" value="2339173, 2339178" placeholder="TICKET NUMBERS"></div></div>
-            <div class="field-row"><span class="label">CONTAINER CLEANED</span><div class="input-area"><input type="text" name="rcv_container_clean" value="YES" placeholder="Y/N/REMARKS"></div></div>
-            <div class="field-row"><span class="label">SPOT CHECK REMARKS</span><div class="input-area"><textarea rows="2" name="rcv_remarks" placeholder="SPOT CHECK NOTES...">ALL WHEEL STOPPERS OK. CCTV PLAYBACK CHECKED.</textarea></div></div>
+            <div class="field-row"><span class="label">RCV VEHICLE NO(S).</span><div class="input-area"><input type="text" name="rcv_vehicle" placeholder="VEHICLE NUMBERS (e.g. XP6256, WJ3668)"></div></div>
+            <div class="field-row"><span class="label">VEHICLE TYPE</span><div class="input-area"><input type="text" name="rcv_type" placeholder="TYPE CODE (e.g. F, B)"></div></div>
+            <div class="field-row"><span class="label">WASTE TYPE CODE</span><div class="input-area"><input type="text" name="rcv_waste_type" placeholder="WASTE CODE (e.g. D01.01, D01.00)"></div></div>
+            <div class="field-row"><span class="label">TICKET NUMBER(S)</span><div class="input-area"><input type="text" name="rcv_ticket" placeholder="TICKET NUMBERS"></div></div>
+            <div class="field-row"><span class="label">CONTAINER CLEANED</span><div class="input-area"><input type="text" name="rcv_container_clean" placeholder="Y / N / REMARKS"></div></div>
+            <div class="field-row"><span class="label">SPOT CHECK REMARKS</span><div class="input-area"><textarea rows="2" name="rcv_remarks" placeholder="SPOT CHECK NOTES..."></textarea></div></div>
         </div>
         
         <!-- GENERAL REMARKS -->
         <div class="section"><div class="section-title">📌 GENERAL REMARKS</div>
-            <div class="field-row"><span class="label">ADDITIONAL REMARKS</span><div class="input-area"><textarea rows="2" name="general_remarks" placeholder="EXTRA NOTES">1) ALL WHEEL STOPPERS OK. 2) CCTV PLAYBACK CHECKED.</textarea></div></div>
+            <div class="field-row"><span class="label">ADDITIONAL REMARKS</span><div class="input-area"><textarea rows="2" name="general_remarks" placeholder="EXTRA NOTES..."></textarea></div></div>
         </div>
 
         <button type="button" id="exportBtn">📎 EXPORT TO EXCEL (.XLSX)</button>
-        <div class="legend">✅ 46 Regular Items + 29 OEP Items = 75 Total Check Points.<br>💾 Auto-save on every input. Export clears saved draft. <strong style="color:#00695c;">✓ Grey placeholders disappear when you start typing (browser native behavior).</strong> Smart ID: "i21" → "I(TD)21".</div>
+        <div class="legend">✅ <strong>46 Regular Items + 29 OEP Items = 75 Total Check Points</strong><br>
+        💾 Auto-save on every input. Export clears saved draft.<br>
+        🎯 <strong style="color:#00695c;">✓ Grey placeholders disappear when you start typing</strong> (browser native behavior).<br>
+        🔧 Smart ID: type "i21" → automatically converts to "I(TD)21".<br>
+        📊 Excel export: Headers in first row, data in second row.</div>
     </form>
 </div>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
-    // 大写转换 JS (不干扰 placeholder)
+    // 大写转换 JS (不干扰 placeholder 显示)
     document.querySelectorAll('input, textarea').forEach(el => {
         if(el.type !== 'date' && el.type !== 'time') {
             el.addEventListener('input', function(e) { 
                 this.value = this.value.toUpperCase(); 
             });
-            if(el.value && !el.placeholder) el.value = el.value.toUpperCase();
         }
     });
     
-    // 智能 ID 转换
+    // 智能 ID 转换：i21 → I(TD)21
     const inspectedBy = document.getElementById('inspectedBy');
     function smartIdFormat(val) {
         let v = val.trim().toUpperCase();
@@ -191,9 +207,11 @@
         if (m) return `I(TD)${m[0]}`;
         return v;
     }
-    inspectedBy.addEventListener('blur', function() { this.value = smartIdFormat(this.value); });
+    inspectedBy.addEventListener('blur', function() { 
+        if(this.value.trim()) this.value = smartIdFormat(this.value); 
+    });
     
-    // Auto-save 功能
+    // ========== AUTO-SAVE 功能 ==========
     const STORAGE_KEY = 'STTS_full_75_draft';
     const form = document.getElementById('inspectionForm');
     const dateEl = document.getElementById('inspectDate');
@@ -202,48 +220,103 @@
     
     function collectDraft() {
         let fd = new FormData(form);
-        let data = { meta: { date: dateEl.value, shift: shiftEl.value, weather: weatherEl.value, inspected: inspectedBy.value }, fields: {} };
+        let data = { 
+            meta: { 
+                date: dateEl.value, 
+                shift: shiftEl.value, 
+                weather: weatherEl.value, 
+                inspected: inspectedBy.value 
+            }, 
+            fields: {} 
+        };
         for(let [k,v] of fd.entries()) data.fields[k] = v;
         return data;
     }
-    function saveDraft() { localStorage.setItem(STORAGE_KEY, JSON.stringify(collectDraft())); showBadge('Saved'); }
+    
+    function saveDraft() { 
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(collectDraft())); 
+        showBadge('Saved'); 
+    }
+    
     function restoreDraft() {
         let raw = localStorage.getItem(STORAGE_KEY);
         if(!raw) return;
         try {
             let d = JSON.parse(raw);
             if(d.meta) {
-                dateEl.value = d.meta.date || '2026-03-28';
-                shiftEl.value = d.meta.shift || '08:00';
-                weatherEl.value = d.meta.weather || 'CLOUDY';
-                inspectedBy.value = d.meta.inspected || 'I(TD)41';
+                if(d.meta.date) dateEl.value = d.meta.date;
+                if(d.meta.shift) shiftEl.value = d.meta.shift;
+                if(d.meta.weather) weatherEl.value = d.meta.weather;
+                if(d.meta.inspected) inspectedBy.value = d.meta.inspected;
             }
-            if(d.fields) for(let [k,v] of Object.entries(d.fields)) { let el = document.querySelector(`[name="${k}"]`); if(el) el.value = v; }
+            if(d.fields) {
+                for(let [k,v] of Object.entries(d.fields)) { 
+                    let el = document.querySelector(`[name="${k}"]`); 
+                    if(el) el.value = v; 
+                }
+            }
             showBadge('Restored');
         } catch(e) {}
     }
-    let saveTimer;
-    function autoSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveDraft, 500); }
-    function showBadge(msg) { let b = document.getElementById('autoSaveBadge'); let orig = b.innerHTML; b.innerHTML = `💾 ${msg}`; setTimeout(() => b.innerHTML = orig, 1500); }
     
+    let saveTimer;
+    function autoSave() { 
+        clearTimeout(saveTimer); 
+        saveTimer = setTimeout(saveDraft, 500); 
+    }
+    
+    function showBadge(msg) { 
+        let b = document.getElementById('autoSaveBadge'); 
+        let orig = b.innerHTML; 
+        b.innerHTML = `💾 ${msg}`; 
+        setTimeout(() => b.innerHTML = orig, 1500); 
+    }
+    
+    // 绑定自动保存事件
     document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', autoSave));
-    dateEl.addEventListener('change', autoSave); shiftEl.addEventListener('change', autoSave); weatherEl.addEventListener('change', autoSave); inspectedBy.addEventListener('input', autoSave);
+    dateEl.addEventListener('change', autoSave);
+    shiftEl.addEventListener('change', autoSave);
+    weatherEl.addEventListener('change', autoSave);
+    inspectedBy.addEventListener('input', autoSave);
+    
+    // 恢复保存的数据
     restoreDraft();
     
-    // Excel 导出 (单行表头，导出后清除草稿)
+    // ========== EXCEL 导出 (单行表头，导出后清除草稿) ==========
     function exportToExcel() {
-        if(!inspectedBy.value.trim()) { alert('Please enter Inspected By (Officer ID)'); inspectedBy.focus(); return; }
-        let flat = { inspection_date: dateEl.value, shift: shiftEl.value, weather: weatherEl.value, inspected_by: inspectedBy.value };
-        for(let el of form.elements) if(el.name) flat[el.name] = (typeof el.value === 'string') ? el.value.replace(/\r?\n/g, ' ').trim() : el.value;
+        if(!inspectedBy.value.trim()) { 
+            alert('❌ Please enter Inspected By (Officer ID) before exporting.'); 
+            inspectedBy.focus(); 
+            return; 
+        }
+        
+        let flat = { 
+            inspection_date: dateEl.value, 
+            shift: shiftEl.value, 
+            weather: weatherEl.value, 
+            inspected_by: inspectedBy.value 
+        };
+        
+        for(let el of form.elements) {
+            if(el.name) {
+                flat[el.name] = (typeof el.value === 'string') ? el.value.replace(/\r?\n/g, ' ').trim() : el.value;
+            }
+        }
+        
         let headers = Object.keys(flat);
         let row = headers.map(h => flat[h]);
         let ws = XLSX.utils.aoa_to_sheet([headers, row]);
         let wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'STTS_Inspection');
-        XLSX.writeFile(wb, `STTS_Inspection_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.xlsx`);
+        
+        let timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
+        XLSX.writeFile(wb, `STTS_Inspection_${timestamp}.xlsx`);
+        
+        // 导出成功后清除草稿
         localStorage.removeItem(STORAGE_KEY);
-        alert('✅ Export successful! Draft has been cleared.\n\nHeaders are in first row, data in second row.');
+        alert('✅ Export successful! Headers in first row, data in second row.\n\nDraft has been cleared.');
     }
+    
     document.getElementById('exportBtn').addEventListener('click', exportToExcel);
 </script>
 </body>
