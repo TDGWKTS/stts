@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>STTS Daily Inspection – 46+29 Items</title>
+    <title>STTS Daily Inspection – Full 46+29 Items</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #e9f0ee; font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif; padding: 24px 16px; }
@@ -16,24 +16,8 @@
         .meta-item label { font-weight: 700; color: #00695c; font-size: 0.85rem; }
         .required-star { color: #c62828; }
         
-        input::placeholder, textarea::placeholder { 
-            color: #9e9e9e !important; 
-            font-style: italic !important; 
-            font-weight: 400 !important; 
-            opacity: 1 !important;
-        }
-        input::-webkit-input-placeholder { color: #9e9e9e; font-style: italic; }
-        input::-moz-placeholder { color: #9e9e9e; font-style: italic; }
-        
-        input, select, textarea { 
-            padding: 8px 16px; 
-            border-radius: 40px; 
-            border: 1px solid #cbdcd6; 
-            background: white; 
-            font-family: 'Courier New', monospace; 
-            font-weight: 500; 
-            font-size: 0.85rem; 
-        }
+        input::placeholder, textarea::placeholder { color: #9e9e9e !important; font-style: italic !important; font-weight: 400 !important; opacity: 1 !important; }
+        input, select, textarea { padding: 8px 16px; border-radius: 40px; border: 1px solid #cbdcd6; background: white; font-family: 'Courier New', monospace; font-weight: 500; font-size: 0.85rem; }
         textarea { border-radius: 20px; }
         .section { margin-top: 2px; }
         .section-title { background: #e0f2f1; padding: 12px 28px; font-weight: 800; font-size: 1.1rem; color: #004d40; border-left: 6px solid #00897b; margin-top: 8px; }
@@ -45,330 +29,417 @@
         .inline-cluster select { width: auto; min-width: 80px; }
         .cctv-group { display: flex; flex-wrap: wrap; gap: 16px; background: #fafefc; padding: 8px 0; }
         .cctv-unit { background: #f4f9f7; padding: 6px 12px; border-radius: 48px; display: inline-flex; gap: 12px; align-items: center; }
-        button { background: #00695c; border: none; width: calc(100% - 56px); margin: 24px 28px 32px 28px; padding: 14px; font-weight: bold; font-size: 1rem; border-radius: 60px; color: white; cursor: pointer; transition: 0.2s; }
-        button:hover { background: #00897b; }
+        
+        .button-wrapper { display: flex; margin: 24px 28px 20px 28px; }
+        .btn-primary { flex: 1; background: #00695c; border: none; padding: 14px; font-weight: bold; font-size: 1rem; border-radius: 60px; color: white; cursor: pointer; transition: 0.2s; }
+        .btn-primary:hover { background: #00897b; }
+        
         .legend { background: #fff7e5; padding: 12px 28px; font-size: 0.7rem; color: #a86407; border-top: 1px solid #ffe0b5; }
         .legend p { margin: 4px 0; }
         .auto-save-badge { background: #e8f5e9; border-radius: 40px; padding: 6px 14px; font-size: 0.75rem; font-weight: 600; color: #2e7d32; display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
-        @media (max-width: 700px) { .field-row { flex-direction: column; align-items: flex-start; } .field-row .label { width: 100%; } }
-        .validation-error { border: 2px solid #c62828 !important; background-color: #ffebee !important; }
+        
+        @media (max-width: 700px) { .field-row { flex-direction: column; align-items: flex-start; } .field-row .label { width: 100%; } .button-wrapper { flex-direction: column; } }
     </style>
 </head>
 <body>
 <div class="form-container">
     <div class="doc-header">
         <h1>STTS DAILY INSPECTION FORM</h1>
-        <div class="sub">CONTRACT EP/SP/76/14<br>DOIF-STTS-002-V2</div>
+        <div class="sub">Contract Ep/Sp/76/14<br>Doif-Stts-002-V2</div>
     </div>
 
     <div class="meta-bar">
-        <div class="meta-item"><label>📅 INSPECTION DATE <span class="required-star">*</span></label><input type="date" id="inspectDate" value="2026-03-28"></div>
-        <div class="meta-item"><label>👤 INSPECTED BY <span class="required-star">*</span></label><input type="text" id="inspectedBy" placeholder="(e.g. i21 or I(TD)21)"></div>
-        <div class="meta-item"><label>⏱️ SHIFT / TIME <span class="required-star">*</span></label><select id="shiftSelect"><option value="08:00">08:00</option><option value="13:00">13:00</option><option value="19:00">19:00</option></select></div>
-        <div class="meta-item"><label>🌦️ WEATHER</label><select id="weatherSel"><option value="SUNNY" selected>SUNNY</option><option value="CLOUDY">CLOUDY</option><option value="FINE">FINE</option><option value="RAINY">RAINY</option></select></div>
+        <div class="meta-item"><label>📅 Inspection Date <span class="required-star">*</span></label><input type="date" id="inspectDate" value="2026-03-28"></div>
+        <div class="meta-item"><label>👤 Inspected By <span class="required-star">*</span></label><input type="text" id="inspectedBy" placeholder="(e.g. i21 or I(TD)21)"></div>
+        <div class="meta-item"><label>⏱️ Shift / Time <span class="required-star">*</span></label><select id="shiftSelect"><option value="08:00">08:00</option><option value="11:00">11:00</option><option value="13:00">13:00</option><option value="16:00">16:00</option><option value="19:00">19:00</option><option value="22:00">22:00</option></select></div>
+        <div class="meta-item"><label>🌦️ Weather</label><select id="weatherSel"><option value="Sunny" selected>Sunny</option><option value="Cloudy">Cloudy</option><option value="Fine">Fine</option><option value="Rainy">Rainy</option></select></div>
         <div class="auto-save-badge" id="autoSaveBadge">💾 Auto-saved</div>
     </div>
 
     <form id="inspectionForm">
-        <!-- WATER & WEIGHBRIDGE (1-11) -->
-        <div class="section"><div class="section-title">💧 WATER CONSUMPTION & WEIGHBRIDGE (1-11)</div>
-            <div class="field-row"><span class="label">1. INDUSTRIAL WATER METER READING</span><div class="input-area"><input type="text" name="item_01" placeholder="(meter reading)"></div></div>
-            <div class="field-row"><span class="label">2. WASTEWATER FLOW METER READING</span><div class="input-area"><input type="text" name="item_02" placeholder="(flow reading)"></div></div>
-            <div class="field-row"><span class="label">3. WEIGHBRIDGE CPU</span><div class="input-area"><select name="item_03"><option value="Y" selected>Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">4. STATUS OF WEIGHBRIDGE (NO.1/2/3)</span><div class="inline-cluster"><select name="item_04a"><option value="Y" selected>No.1 Y</option><option value="X">X</option></select><select name="item_04b"><option value="Y" selected>No.2 Y</option><option value="X">X</option></select><select name="item_04c"><option value="Y" selected>No.3 Y</option><option value="X">X</option></select></div></div>
-            <div class="field-row"><span class="label">5. DROP BARRIER / TRAFFIC LIGHT</span><div class="inline-cluster"><select name="item_05a"><option value="Y" selected>No.1 Y</option><option value="X">X</option></select><select name="item_05b"><option value="Y" selected>No.2 Y</option><option value="X">X</option></select><select name="item_05c"><option value="Y" selected>No.3 Y</option><option value="X">X</option></select></div></div>
-            <div class="field-row"><span class="label">6. CCTV (IN / OUT) - 3 CAMERAS</span><div class="cctv-group"><div class="cctv-unit">NO.1 IN:<select name="item_06a_in"><option value="Y" selected>Y</option><option value="X">X</option></select> OUT:<select name="item_06a_out"><option value="Y" selected>Y</option><option value="X">X</option></select></div><div class="cctv-unit">NO.2 IN:<select name="item_06b_in"><option value="Y" selected>Y</option><option value="X">X</option></select> OUT:<select name="item_06b_out"><option value="Y" selected>Y</option><option value="X">X</option></select></div><div class="cctv-unit">NO.3 IN:<select name="item_06c_in"><option value="Y" selected>Y</option><option value="X">X</option></select> OUT:<select name="item_06c_out"><option value="Y" selected>Y</option><option value="X">X</option></select></div></div></div>
-            <div class="field-row"><span class="label">7. NO. OF WEIGHBRIDGE OPERATOR</span><div class="input-area"><input type="text" name="item_07" placeholder="(number)"></div></div>
-            <div class="field-row"><span class="label">8. VOID OR MANUAL TICKET</span><div class="input-area"><select name="item_08"><option value="N" selected>N</option><option value="Y">Y</option></select></div></div>
-            <div class="field-row"><span class="label">9. WATER SPRAYING / BRUSHING</span><div class="input-area"><select name="item_09"><option value="Y" selected>Y</option><option value="N">N</option><option value="NA">NA</option></select></div></div>
-            <div class="field-row"><span class="label">10. DROP BARRIER / TRAFFIC LIGHT (VWP)</span><div class="input-area"><select name="item_10"><option value="Y" selected>Y</option><option value="N">N</option><option value="NA">NA</option></select></div></div>
-            <div class="field-row"><span class="label">11. RECYCLING WATER SYSTEM ROOM</span><div class="input-area"><select name="item_11"><option value="Y" selected>Y</option><option value="X">X</option></select></div></div>
+        <!-- SECTION 1: WATER & WEIGHBRIDGE (1-11) -->
+        <div class="section"><div class="section-title">💧 Water Consumption & Weighbridge (1-11)</div>
+            <div class="field-row"><span class="label">1. Industrial Water Meter Reading</span><div class="input-area"><input type="text" name="field_01" placeholder="(meter reading)"></div></div>
+            <div class="field-row"><span class="label">2. Wastewater Flow Meter Reading</span><div class="input-area"><input type="text" name="field_02" placeholder="(flow reading)"></div></div>
+            <div class="field-row"><span class="label">3. Weighbridge Cpu</span><div class="input-area"><select name="field_03"><option value="Y">Y (Ok)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">4. Status of Weighbridge (No.1/2/3)</span><div class="inline-cluster"><select name="field_04a"><option value="Y">No.1 Y</option><option value="X">X</option></select><select name="field_04b"><option value="Y">No.2 Y</option><option value="X">X</option></select><select name="field_04c"><option value="Y">No.3 Y</option><option value="X">X</option></select></div></div>
+            <div class="field-row"><span class="label">5. Drop Barrier / Traffic Light</span><div class="inline-cluster"><select name="field_05a"><option value="Y">No.1 Y</option><option value="X">X</option></select><select name="field_05b"><option value="Y">No.2 Y</option><option value="X">X</option></select><select name="field_05c"><option value="Y">No.3 Y</option><option value="X">X</option></select></div></div>
+            <div class="field-row"><span class="label">6. Cctv (In / Out) - 3 Cameras</span><div class="cctv-group"><div class="cctv-unit">No.1 In:<select name="field_06a_in"><option value="Y">Y</option><option value="X">X</option></select> Out:<select name="field_06a_out"><option value="Y">Y</option><option value="X">X</option></select></div><div class="cctv-unit">No.2 In:<select name="field_06b_in"><option value="Y">Y</option><option value="X">X</option></select> Out:<select name="field_06b_out"><option value="Y">Y</option><option value="X">X</option></select></div><div class="cctv-unit">No.3 In:<select name="field_06c_in"><option value="Y">Y</option><option value="X">X</option></select> Out:<select name="field_06c_out"><option value="Y">Y</option><option value="X">X</option></select></div></div></div>
+            <div class="field-row"><span class="label">7. No. of Weighbridge Operator</span><div class="input-area"><input type="text" name="field_07" placeholder="(number)"></div></div>
+            <div class="field-row"><span class="label">8. Void or Manual Ticket</span><div class="input-area"><select name="field_08"><option value="N">N</option><option value="Y">Y</option></select></div></div>
+            <div class="field-row"><span class="label">9. Water Spraying / Brushing</span><div class="input-area"><select name="field_09"><option value="Y">Y</option><option value="N">N</option><option value="Na">Na</option></select></div></div>
+            <div class="field-row"><span class="label">10. Drop Barrier / Traffic Light (Vwp)</span><div class="input-area"><select name="field_10"><option value="Y">Y</option><option value="N">N</option><option value="Na">Na</option></select></div></div>
+            <div class="field-row"><span class="label">11. Recycling Water System Room</span><div class="input-area"><select name="field_11"><option value="Y">Y</option><option value="X">X</option></select></div></div>
         </div>
 
-        <!-- TIPPING HALL (12-22) -->
-        <div class="section"><div class="section-title">🏗️ TIPPING HALL & COMPACTOR AREA (12-22)</div>
-            <div class="field-row"><span class="label">12. LIVE FLOOR (NO.1/2/3)</span><div class="inline-cluster"><select name="item_12a"><option value="Y" selected>NO.1 Y</option><option value="X">X</option></select><select name="item_12b"><option value="Y" selected>NO.2 Y</option><option value="X">X</option></select><select name="item_12c"><option value="X" selected>NO.3 X</option><option value="Y">Y</option></select></div></div>
-            <div class="field-row"><span class="label">13. VENTILATION FAN (NO.1/2)</span><div class="inline-cluster"><select name="item_13a"><option value="Y" selected>V1 Y</option><option value="X">X</option></select><select name="item_13b"><option value="Y" selected>V2 Y</option><option value="X">X</option></select></div></div>
-            <div class="field-row"><span class="label">14A. CONTROL OPERATOR (COUNT)</span><div class="input-area"><input type="text" name="item_14a" placeholder="(count)"></div></div>
-            <div class="field-row"><span class="label">14B. TIPPER HALL ASSISTANT</span><div class="input-area"><input type="text" name="item_14b" placeholder="(count)"></div></div>
-            <div class="field-row"><span class="label">15. LIGHTING (TH)</span><div class="input-area"><select name="item_15"><option value="Y" selected>Y</option><option value="N">N</option></select></div></div>
-            <div class="field-row"><span class="label">16. FIRE EXTINGUISHER STATUS</span><div class="input-area"><select name="item_16"><option value="Y" selected>Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">17. EMERGENCY STOP BUTTON</span><div class="input-area"><select name="item_17"><option value="Y" selected>Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">18. CONVEYOR BELT STATUS</span><div class="input-area"><select name="item_18"><option value="Y" selected>Y (NORMAL)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">19. DEODORIZER SYSTEM</span><div class="input-area"><select name="item_19"><option value="Y" selected>Y (WORKING)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">20. HYDRAULIC SYSTEM PRESSURE</span><div class="input-area"><select name="item_20"><option value="Y" selected>Y (NORMAL)</option><option value="X">X (ABNORMAL)</option></select></div></div>
-            <div class="field-row"><span class="label">21. ACCESS GATE / BARRIER</span><div class="input-area"><select name="item_21"><option value="Y" selected>Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">22. COMPACTOR (NO.1/2/3)</span><div class="inline-cluster"><select name="item_22a"><option value="Y" selected>C1 Y</option><option value="X">X</option></select><select name="item_22b"><option value="Y" selected>C2 Y</option><option value="X">X</option></select><select name="item_22c"><option value="X" selected>C3 X</option><option value="Y">Y</option></select></div></div>
+        <!-- SECTION 2: TIPPING HALL (12-22) -->
+        <div class="section"><div class="section-title">🏗️ Tipping Hall & Compactor Area (12-22)</div>
+            <div class="field-row"><span class="label">12. Live Floor (No.1/2/3)</span><div class="inline-cluster"><select name="field_12a"><option value="Y">No.1 Y</option><option value="X">X</option></select><select name="field_12b"><option value="Y">No.2 Y</option><option value="X">X</option></select><select name="field_12c"><option value="X">No.3 X</option><option value="Y">Y</option></select></div></div>
+            <div class="field-row"><span class="label">13. Ventilation Fan (No.1/2)</span><div class="inline-cluster"><select name="field_13a"><option value="Y">V1 Y</option><option value="X">X</option></select><select name="field_13b"><option value="Y">V2 Y</option><option value="X">X</option></select></div></div>
+            <div class="field-row"><span class="label">14A. Control Operator (Count)</span><div class="input-area"><input type="text" name="field_14a" placeholder="(count)"></div></div>
+            <div class="field-row"><span class="label">14B. Tipper Hall Assistant</span><div class="input-area"><input type="text" name="field_14b" placeholder="(count)"></div></div>
+            <div class="field-row"><span class="label">15. Lighting (Th)</span><div class="input-area"><select name="field_15"><option value="Y">Y</option><option value="N">N</option></select></div></div>
+            <div class="field-row"><span class="label">16. Fire Extinguisher Status</span><div class="input-area"><select name="field_16"><option value="Y">Y (Ok)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">17. Emergency Stop Button</span><div class="input-area"><select name="field_17"><option value="Y">Y (Ok)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">18. Conveyor Belt Status</span><div class="input-area"><select name="field_18"><option value="Y">Y (Normal)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">19. Deodorizer System</span><div class="input-area"><select name="field_19"><option value="Y">Y (Working)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">20. Hydraulic System Pressure</span><div class="input-area"><select name="field_20"><option value="Y">Y (Normal)</option><option value="X">X (Abnormal)</option></select></div></div>
+            <div class="field-row"><span class="label">21. Access Gate / Barrier</span><div class="input-area"><select name="field_21"><option value="Y">Y (Ok)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">22. Compactor (No.1/2/3)</span><div class="inline-cluster"><select name="field_22a"><option value="Y">C1 Y</option><option value="X">X</option></select><select name="field_22b"><option value="Y">C2 Y</option><option value="X">X</option></select><select name="field_22c"><option value="X">C3 X</option><option value="Y">Y</option></select></div></div>
         </div>
 
-        <!-- ADDITIONAL FACILITY ITEMS (23-46) -->
-        <div class="section"><div class="section-title">🔧 ADDITIONAL FACILITY & SAFETY ITEMS (23-46)</div>
-            <div class="field-row"><span class="label">23. SCADA SYSTEM</span><div class="input-area"><select name="item_23"><option value="Y" selected>Y (NORMAL)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">24. FIRE ALARM PANEL</span><div class="input-area"><select name="item_24"><option value="Y" selected>Y (NORMAL)</option><option value="X">X (ALARM)</option></select></div></div>
-            <div class="field-row"><span class="label">25. EMERGENCY LIGHTING</span><div class="input-area"><select name="item_25"><option value="Y" selected>Y (PASS)</option><option value="X">X (FAIL)</option></select></div></div>
-            <div class="field-row"><span class="label">26. EXIT SIGNS</span><div class="input-area"><select name="item_26"><option value="Y" selected>Y (OK)</option><option value="X">X (FAIL)</option></select></div></div>
-            <div class="field-row"><span class="label">27. FIRST AID KIT</span><div class="input-area"><select name="item_27"><option value="Y" selected>Y (YES)</option><option value="X">X (NO)</option></select></div></div>
-            <div class="field-row"><span class="label">28. PPE COMPLIANCE</span><div class="input-area"><select name="item_28"><option value="Y" selected>Y (COMPLY)</option><option value="X">X (NON-COMPLY)</option></select></div></div>
-            <div class="field-row"><span class="label">29. HOUSEKEEPING</span><div class="input-area"><select name="item_29"><option value="Y" selected>Y (CLEAN)</option><option value="X">X (DIRTY)</option></select></div></div>
-            <div class="field-row"><span class="label">30. ODOUR CONTROL UNIT</span><div class="input-area"><select name="item_30"><option value="Y" selected>Y (RUNNING)</option><option value="X">X (STOP)</option></select></div></div>
-            <div class="field-row"><span class="label">31. WASTEWATER TREATMENT</span><div class="input-area"><select name="item_31"><option value="Y" selected>Y (NORMAL)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">32. CHEMICAL STORAGE</span><div class="input-area"><select name="item_32"><option value="Y" selected>Y (SECURE)</option><option value="X">X (LEAK)</option></select></div></div>
-            <div class="field-row"><span class="label">33. SPILL KIT</span><div class="input-area"><select name="item_33"><option value="Y" selected>Y (READY)</option><option value="X">X (MISSING)</option></select></div></div>
-            <div class="field-row"><span class="label">34. VEHICLE WASH BAY</span><div class="input-area"><select name="item_34"><option value="Y" selected>Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">35. WEIGHBRIDGE CALIBRATION</span><div class="input-area"><select name="item_35"><option value="Y" selected>Y (VALID)</option><option value="X">X (EXPIRED)</option></select></div></div>
-            <div class="field-row"><span class="label">36. CCTV RECORDING</span><div class="input-area"><select name="item_36"><option value="Y" selected>Y (OK)</option><option value="X">X (FAIL)</option></select></div></div>
-            <div class="field-row"><span class="label">37. TRAFFIC SIGNS</span><div class="input-area"><select name="item_37"><option value="Y" selected>Y (CLEAR)</option><option value="X">X (DAMAGED)</option></select></div></div>
-            <div class="field-row"><span class="label">38. SPEED LIMIT</span><div class="input-area"><select name="item_38"><option value="Y" selected>Y (COMPLY)</option><option value="X">X (VIOLATION)</option></select></div></div>
-            <div class="field-row"><span class="label">39. WHEEL WASH</span><div class="input-area"><select name="item_39"><option value="Y" selected>Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">40. DRAINAGE SYSTEM</span><div class="input-area"><select name="item_40"><option value="Y" selected>Y (CLEAR)</option><option value="X">X (BLOCKED)</option></select></div></div>
-            <div class="field-row"><span class="label">41. PEST CONTROL</span><div class="input-area"><select name="item_41"><option value="Y" selected>Y (ACTIVE)</option><option value="X">X (INACTIVE)</option></select></div></div>
-            <div class="field-row"><span class="label">42. SAFETY SIGNAGE</span><div class="input-area"><select name="item_42"><option value="Y" selected>Y (GOOD)</option><option value="X">X (DAMAGED)</option></select></div></div>
-            <div class="field-row"><span class="label">43. RADIO SYSTEM</span><div class="input-area"><select name="item_43"><option value="Y" selected>Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">44. GENERATOR FUEL</span><div class="input-area"><input type="text" name="item_44" placeholder="(percentage e.g. 80%)"></div></div>
-            <div class="field-row"><span class="label">45. UV TREATMENT</span><div class="input-area"><select name="item_45"><option value="Y" selected>Y (NORMAL)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">46. AIR COMPRESSOR</span><div class="input-area"><select name="item_46"><option value="Y" selected>Y (RUNNING)</option><option value="X">X (STOP)</option></select></div></div>
+        <!-- SECTION 3: ADDITIONAL FACILITY (23-46) -->
+        <div class="section"><div class="section-title">🔧 Additional Facility & Safety Items (23-46)</div>
+            <div class="field-row"><span class="label">23. Scada System</span><div class="input-area"><select name="field_23"><option value="Y">Y (Normal)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">24. Fire Alarm Panel</span><div class="input-area"><select name="field_24"><option value="Y">Y (Normal)</option><option value="X">X (Alarm)</option></select></div></div>
+            <div class="field-row"><span class="label">25. Emergency Lighting</span><div class="input-area"><select name="field_25"><option value="Y">Y (Pass)</option><option value="X">X (Fail)</option></select></div></div>
+            <div class="field-row"><span class="label">26. Exit Signs</span><div class="input-area"><select name="field_26"><option value="Y">Y (Ok)</option><option value="X">X (Fail)</option></select></div></div>
+            <div class="field-row"><span class="label">27. First Aid Kit</span><div class="input-area"><select name="field_27"><option value="Y">Y (Yes)</option><option value="X">X (No)</option></select></div></div>
+            <div class="field-row"><span class="label">28. Ppe Compliance</span><div class="input-area"><select name="field_28"><option value="Y">Y (Comply)</option><option value="X">X (Non-Comply)</option></select></div></div>
+            <div class="field-row"><span class="label">29. Housekeeping</span><div class="input-area"><select name="field_29"><option value="Y">Y (Clean)</option><option value="X">X (Dirty)</option></select></div></div>
+            <div class="field-row"><span class="label">30. Odour Control Unit</span><div class="input-area"><select name="field_30"><option value="Y">Y (Running)</option><option value="X">X (Stop)</option></select></div></div>
+            <div class="field-row"><span class="label">31. Wastewater Treatment</span><div class="input-area"><select name="field_31"><option value="Y">Y (Normal)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">32. Chemical Storage</span><div class="input-area"><select name="field_32"><option value="Y">Y (Secure)</option><option value="X">X (Leak)</option></select></div></div>
+            <div class="field-row"><span class="label">33. Spill Kit</span><div class="input-area"><select name="field_33"><option value="Y">Y (Ready)</option><option value="X">X (Missing)</option></select></div></div>
+            <div class="field-row"><span class="label">34. Vehicle Wash Bay</span><div class="input-area"><select name="field_34"><option value="Y">Y (Ok)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">35. Weighbridge Calibration</span><div class="input-area"><select name="field_35"><option value="Y">Y (Valid)</option><option value="X">X (Expired)</option></select></div></div>
+            <div class="field-row"><span class="label">36. Cctv Recording</span><div class="input-area"><select name="field_36"><option value="Y">Y (Ok)</option><option value="X">X (Fail)</option></select></div></div>
+            <div class="field-row"><span class="label">37. Traffic Signs</span><div class="input-area"><select name="field_37"><option value="Y">Y (Clear)</option><option value="X">X (Damaged)</option></select></div></div>
+            <div class="field-row"><span class="label">38. Speed Limit</span><div class="input-area"><select name="field_38"><option value="Y">Y (Comply)</option><option value="X">X (Violation)</option></select></div></div>
+            <div class="field-row"><span class="label">39. Wheel Wash</span><div class="input-area"><select name="field_39"><option value="Y">Y (Ok)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">40. Drainage System</span><div class="input-area"><select name="field_40"><option value="Y">Y (Clear)</option><option value="X">X (Blocked)</option></select></div></div>
+            <div class="field-row"><span class="label">41. Pest Control</span><div class="input-area"><select name="field_41"><option value="Y">Y (Active)</option><option value="X">X (Inactive)</option></select></div></div>
+            <div class="field-row"><span class="label">42. Safety Signage</span><div class="input-area"><select name="field_42"><option value="Y">Y (Good)</option><option value="X">X (Damaged)</option></select></div></div>
+            <div class="field-row"><span class="label">43. Radio System</span><div class="input-area"><select name="field_43"><option value="Y">Y (Ok)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">44. Generator Fuel</span><div class="input-area"><input type="text" name="field_44" placeholder="(percentage e.g. 80%)"></div></div>
+            <div class="field-row"><span class="label">45. Uv Treatment</span><div class="input-area"><select name="field_45"><option value="Y">Y (Normal)</option><option value="X">X (Fault)</option></select></div></div>
+            <div class="field-row"><span class="label">46. Air Compressor</span><div class="input-area"><select name="field_46"><option value="Y">Y (Running)</option><option value="X">X (Stop)</option></select></div></div>
         </div>
 
-        <!-- OEP: 29 ITEMS -->
-        <div class="section"><div class="section-title">🌿 OPERATIONAL & ENVIRONMENTAL PERFORMANCE (29 ITEMS)</div>
-            <div class="field-row"><span class="label">OEP-1: VEHICLE TURNAROUND TIME > 25 MIN</span><select name="oep1"><option value="N" selected>N</option><option value="Y">Y</option></select></div>
-            <div class="field-row"><span class="label">OEP-2: QUEUING OF RCVS OUTSIDE STATION</span><select name="oep2"><option value="N" selected>N</option><option value="Y">Y</option></select></div>
-            <div class="field-row"><span class="label">OEP-3: VEHICLE WASHING HOUSE</span><select name="oep3"><option value="N" selected>N</option><option value="Y">Y</option></select></div>
-            <div class="field-row"><span class="label">OEP-4: SPILLAGE OF REFUSE EXTERNAL & NOT REMOVED <30MIN</span><select name="oep4"><option value="N" selected>N</option><option value="Y">Y</option></select></div>
-            <div class="field-row"><span class="label">OEP-5: SPILLAGE/LEACHATE FROM TRAILER</span><select name="oep5"><option value="N" selected>N</option><option value="Y">Y</option></select></div>
-            <div class="field-row"><span class="label">OEP-6: ABNORMAL NOISE</span><select name="oep6"><option value="N" selected>N</option><option value="Y">Y</option></select></div>
-            <div class="field-row"><span class="label">OEP-7: WASTE INSPECTION (DEFECT REPORT)</span><select name="oep7"><option value="N" selected>N</option><option value="Y">Y</option></select></div>
-            <div class="field-row"><span class="label">OEP-8: CLEANSING AREA (4X/DAY PERFORMED)</span><select name="oep8"><option value="Y" selected>Y</option><option value="N">N</option></select></div>
-            <div class="field-row"><span class="label">OEP-9: HIGHWAY TRACTOR (OPERATE/IDLE)</span><input type="text" name="oep9" placeholder="(e.g. 16 / 8)"></div>
-            <div class="field-row"><span class="label">OEP-10: HIGHWAY TRACTOR IN MAINTENANCE (ST#)</span><input type="text" name="oep10" placeholder="(e.g. ST22)"></div>
-            <div class="field-row"><span class="label">OEP-11: YARD TRACTOR (OPERATE/MAINT/IDLE)</span><input type="text" name="oep11" placeholder="(e.g. 2 / 0 / 1)"></div>
-            <div class="field-row"><span class="label">OEP-12: TRAILER (C#) IN MAINTENANCE</span><input type="text" name="oep12" placeholder="(e.g. C22,C25)"></div>
-            <div class="field-row"><span class="label">OEP-13: CLEANLINESS OF TRACTORS & TRAILERS</span><select name="oep13"><option value="Y" selected>Y</option><option value="N">N</option></select></div>
-            <div class="field-row"><span class="label">OEP-14: BOBCAT / SWEEPER / SCRUBBER DRIER</span><input type="text" name="oep14" placeholder="(e.g. N / N / N)"></div>
-            <div class="field-row"><span class="label">OEP-15: BACKHOE LOADER (JCB) OPERATING AT TH</span><input type="text" name="oep15" placeholder="(count)"></div>
-            <div class="field-row"><span class="label">OEP-16: STORM DRAIN / CATCHPIT</span><select name="oep16"><option value="Y" selected>Y</option><option value="N">N</option></select></div>
-            <div class="field-row"><span class="label">OEP-17: WASTEWATER SAMPLE</span><input type="text" name="oep17" placeholder="(ALS / EPD / TIME)"></div>
-            <div class="field-row"><span class="label">OEP-18: STORM WATER SAMPLE</span><input type="text" name="oep18" placeholder="(ALS/EPD / TIME)"></div>
-            <div class="field-row"><span class="label">OEP-19: INFLUENT SAMPLE</span><input type="text" name="oep19" placeholder="(EPD / TIME)"></div>
-            <div class="field-row"><span class="label">OEP-20: SLUDGE CAKE</span><input type="text" name="oep20" placeholder="(ALS / EPD / TIME)"></div>
-            <div class="field-row"><span class="label">OEP-21: RSP (BOUNDARY/HALL)</span><input type="text" name="oep21" placeholder="(ALS / TIME)"></div>
-            <div class="field-row"><span class="label">OEP-22: NOISE MEASUREMENT</span><input type="text" name="oep22" placeholder="(ALS / TIME)"></div>
-            <div class="field-row"><span class="label">OEP-23: CO & NO2 (HALL)</span><input type="text" name="oep23" placeholder="(ALS / TIME)"></div>
-            <div class="field-row"><span class="label">OEP-24: ODOUR PATROL (0-4)</span><input type="text" name="oep24" placeholder="(0=NOT DETECTED)"></div>
-            <div class="field-row"><span class="label">OEP-25: PEST BREEDING PLACES</span><input type="text" name="oep25" placeholder="(NO / N/A)"></div>
-            <div class="field-row"><span class="label">OEP-26: PEST CONTROL (FOGGING TIME)</span><input type="text" name="oep26" placeholder="(e.g. 15:40)"></div>
-            <div class="field-row"><span class="label">OEP-27: BLACK SMOKE</span><select name="oep27"><option value="N" selected>N</option><option value="Y">Y (TIME)</option></select></div>
-            <div class="field-row"><span class="label">OEP-28: MANAGER PRESENT</span><select name="oep28"><option value="N" selected>N</option><option value="Y">Y</option></select></div>
-            <div class="field-row"><span class="label">OEP-29: VISITOR RECORD</span><input type="text" name="oep29" placeholder="(NONE / DETAILS)"></div>
+        <!-- SECTION 4: OEP 29 ITEMS -->
+        <div class="section"><div class="section-title">🌿 Operational & Environmental Performance (29 Items)</div>
+            <div class="field-row"><span class="label">Oep-1: Vehicle Turnaround Time > 25 Min</span><select name="oep1"><option value="N">N</option><option value="Y">Y</option></select></div>
+            <div class="field-row"><span class="label">Oep-2: Queuing of Rcvs Outside Station</span><select name="oep2"><option value="N">N</option><option value="Y">Y</option></select></div>
+            <div class="field-row"><span class="label">Oep-3: Vehicle Washing House</span><select name="oep3"><option value="N">N</option><option value="Y">Y</option></select></div>
+            <div class="field-row"><span class="label">Oep-4: Spillage of Refuse External & Not Removed <30min</span><select name="oep4"><option value="N">N</option><option value="Y">Y</option></select></div>
+            <div class="field-row"><span class="label">Oep-5: Spillage/Leachate From Trailer</span><select name="oep5"><option value="N">N</option><option value="Y">Y</option></select></div>
+            <div class="field-row"><span class="label">Oep-6: Abnormal Noise</span><select name="oep6"><option value="N">N</option><option value="Y">Y</option></select></div>
+            <div class="field-row"><span class="label">Oep-7: Waste Inspection (Defect Report)</span><select name="oep7"><option value="N">N</option><option value="Y">Y</option></select></div>
+            <div class="field-row"><span class="label">Oep-8: Cleansing Area (4X/Day Performed)</span><select name="oep8"><option value="Y">Y</option><option value="N">N</option></select></div>
+            <div class="field-row"><span class="label">Oep-9: Highway Tractor (Operate/Idle)</span><input type="text" name="oep9" placeholder="(e.g. 16 / 8)"></div>
+            <div class="field-row"><span class="label">Oep-10: Highway Tractor in Maintenance (St#)</span><input type="text" name="oep10" placeholder="(e.g. St22)"></div>
+            <div class="field-row"><span class="label">Oep-11: Yard Tractor (Operate/Maint/Idle)</span><input type="text" name="oep11" placeholder="(e.g. 2 / 0 / 1)"></div>
+            <div class="field-row"><span class="label">Oep-12: Trailer (C#) in Maintenance</span><input type="text" name="oep12" placeholder="(e.g. C22,C25)"></div>
+            <div class="field-row"><span class="label">Oep-13: Cleanliness of Tractors & Trailers</span><select name="oep13"><option value="Y">Y</option><option value="N">N</option></select></div>
+            <div class="field-row"><span class="label">Oep-14: Bobcat / Sweeper / Scrubber Drier</span><input type="text" name="oep14" placeholder="(e.g. N / N / N)"></div>
+            <div class="field-row"><span class="label">Oep-15: Backhoe Loader (Jcb) Operating at Th</span><input type="text" name="oep15" placeholder="(count)"></div>
+            <div class="field-row"><span class="label">Oep-16: Storm Drain / Catchpit</span><select name="oep16"><option value="Y">Y</option><option value="N">N</option></select></div>
+            <div class="field-row"><span class="label">Oep-17: Wastewater Sample</span><input type="text" name="oep17" placeholder="(Als / Epd / Time)"></div>
+            <div class="field-row"><span class="label">Oep-18: Storm Water Sample</span><input type="text" name="oep18" placeholder="(Als/Epd / Time)"></div>
+            <div class="field-row"><span class="label">Oep-19: Influent Sample</span><input type="text" name="oep19" placeholder="(Epd / Time)"></div>
+            <div class="field-row"><span class="label">Oep-20: Sludge Cake</span><input type="text" name="oep20" placeholder="(Als / Epd / Time)"></div>
+            <div class="field-row"><span class="label">Oep-21: Rsp (Boundary/Hall)</span><input type="text" name="oep21" placeholder="(Als / Time)"></div>
+            <div class="field-row"><span class="label">Oep-22: Noise Measurement</span><input type="text" name="oep22" placeholder="(Als / Time)"></div>
+            <div class="field-row"><span class="label">Oep-23: Co & No2 (Hall)</span><input type="text" name="oep23" placeholder="(Als / Time)"></div>
+            <div class="field-row"><span class="label">Oep-24: Odour Patrol (0-4)</span><input type="text" name="oep24" placeholder="(0=Not Detected)"></div>
+            <div class="field-row"><span class="label">Oep-25: Pest Breeding Places</span><input type="text" name="oep25" placeholder="(No / N/A)"></div>
+            <div class="field-row"><span class="label">Oep-26: Pest Control (Fogging Time)</span><input type="text" name="oep26" placeholder="(e.g. 15:40)"></div>
+            <div class="field-row"><span class="label">Oep-27: Black Smoke</span><select name="oep27"><option value="N">N</option><option value="Y">Y (Time)</option></select></div>
+            <div class="field-row"><span class="label">Oep-28: Manning Schedule (Operation Manager Present)</span><select name="oep28"><option value="N">N</option><option value="Y">Y</option></select></div>
+            <div class="field-row"><span class="label">Oep-29: Visitor / Officer Record</span><input type="text" name="oep29" placeholder="(None / Details)"></div>
         </div>
 
         <!-- RCV SPOT CHECK -->
-        <div class="section"><div class="section-title">🚛 RCV SPOT CHECK</div>
-            <div class="field-row"><span class="label">RCV VEHICLE NO(S).</span><div class="input-area"><input type="text" name="rcv_vehicle" placeholder="(e.g. XP6256, WJ3668)"></div></div>
-            <div class="field-row"><span class="label">VEHICLE TYPE</span><div class="input-area"><input type="text" name="rcv_type" placeholder="(e.g. F, B)"></div></div>
-            <div class="field-row"><span class="label">WASTE TYPE CODE</span><div class="input-area"><input type="text" name="rcv_waste_type" placeholder="(e.g. D01.01, D01.00)"></div></div>
-            <div class="field-row"><span class="label">TICKET NUMBER(S)</span><div class="input-area"><input type="text" name="rcv_ticket" placeholder="(ticket numbers)"></div></div>
-            <div class="field-row"><span class="label">CONTAINER CLEANED</span><div class="input-area"><input type="text" name="rcv_container_clean" placeholder="(Y / N / REMARKS)"></div></div>
-            <div class="field-row"><span class="label">SPOT CHECK REMARKS</span><div class="input-area"><textarea rows="2" name="rcv_remarks" placeholder="(spot check notes...)"></textarea></div></div>
+        <div class="section"><div class="section-title">🚛 Rcv Spot Check</div>
+            <div class="field-row"><span class="label">Rcv Vehicle No(S).</span><div class="input-area"><input type="text" name="rcv_vehicle" placeholder="(e.g. Xp6256, Wj3668)"></div></div>
+            <div class="field-row"><span class="label">Vehicle Type</span><div class="input-area"><input type="text" name="rcv_type" placeholder="(e.g. F, B)"></div></div>
+            <div class="field-row"><span class="label">Waste Type Code</span><div class="input-area"><input type="text" name="rcv_waste_type" placeholder="(e.g. D01.01, D01.00)"></div></div>
+            <div class="field-row"><span class="label">Ticket Number(S)</span><div class="input-area"><input type="text" name="rcv_ticket" placeholder="(ticket numbers)"></div></div>
+            <div class="field-row"><span class="label">Container Cleaned</span><div class="input-area"><input type="text" name="rcv_container_clean" placeholder="(Y / N / Remarks)"></div></div>
+            <div class="field-row"><span class="label">Spot Check Remarks</span><div class="input-area"><textarea rows="2" name="rcv_remarks" placeholder="(spot check notes...)"></textarea></div></div>
         </div>
         
         <!-- GENERAL REMARKS -->
-        <div class="section"><div class="section-title">📌 GENERAL REMARKS</div>
-            <div class="field-row"><span class="label">ADDITIONAL REMARKS</span><div class="input-area"><textarea rows="2" name="general_remarks" placeholder="(extra notes...)"></textarea></div></div>
+        <div class="section"><div class="section-title">📌 General Remarks</div>
+            <div class="field-row"><span class="label">Additional Remarks</span><div class="input-area"><textarea rows="2" name="general_remarks" placeholder="(extra notes...)"></textarea></div></div>
         </div>
 
-        <button type="button" id="exportBtn">📎 EXPORT TO EXCEL (.XLSX)</button>
+        <div class="button-wrapper">
+            <button type="button" id="exportBtn" class="btn-primary">📎 Export to Excel</button>
+        </div>
         <div class="legend">
-            <p>✅ 46 Regular Items + 29 OEP Items = 75 Total Check Points</p>
-            <p>💾 Auto-save on every input. Export clears saved draft.</p>
-            <p>🔧 Smart ID: type "i21" → automatically converts to "I(TD)21".</p>
+            <p>✅ 46 Regular Items + 29 Oep Items = 75 Total Check Points</p>
+            <p>💾 Auto-save on every input (data persists even if browser closes)</p>
+            <p>🔧 Smart Id: type "i21" → automatically converts to "I(Td)21"</p>
+            <p>📊 Excel Export: Headers use full descriptions (e.g. "1. Industrial Water Meter Reading")</p>
+            <p>📋 Copy the exported Excel data to your 5K Master Excel file, then use VBA for printing</p>
         </div>
     </form>
 </div>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
-    // 大写转换 JS
-    document.querySelectorAll('input, textarea').forEach(el => {
-        if(el.type !== 'date' && el.type !== 'time') {
-            el.addEventListener('input', function(e) { 
-                if(this.value) {
-                    this.value = this.value.toUpperCase();
-                }
-            });
-        }
-    });
+// ============ 完整的中文描述列表（Excel 表头）============
+const HEADER_MAP = {
+    // Meta
+    'inspection_date': 'Inspection Date',
+    'shift': 'Shift / Time',
+    'weather': 'Weather',
+    'inspected_by': 'Inspected By',
     
-    // 智能 ID 转换：i21 → I(TD)21
-    const inspectedBy = document.getElementById('inspectedBy');
-    function smartIdFormat(val) {
-        if(!val || !val.trim()) return val;
-        let v = val.trim().toUpperCase();
-        if (/^I\d+$/.test(v)) return v.replace(/^I/, 'I(TD)');
-        if (/^I\(TD\)\d+$/.test(v)) return v;
-        if (/^\d+$/.test(v)) return `I(TD)${v}`;
-        let m = v.match(/\d+/);
-        if (m) return `I(TD)${m[0]}`;
-        return v;
-    }
-    inspectedBy.addEventListener('blur', function() { 
-        if(this.value && this.value.trim()) {
-            this.value = smartIdFormat(this.value);
-        }
-    });
+    // Section 1: Water & Weighbridge (1-11)
+    'field_01': '1. Industrial Water Meter Reading',
+    'field_02': '2. Wastewater Flow Meter Reading',
+    'field_03': '3. Weighbridge Cpu',
+    'field_04a': '4. Status of Weighbridge No.1',
+    'field_04b': '4. Status of Weighbridge No.2',
+    'field_04c': '4. Status of Weighbridge No.3',
+    'field_05a': '5. Drop Barrier / Traffic Light No.1',
+    'field_05b': '5. Drop Barrier / Traffic Light No.2',
+    'field_05c': '5. Drop Barrier / Traffic Light No.3',
+    'field_06a_in': '6. Cctv No.1 In',
+    'field_06a_out': '6. Cctv No.1 Out',
+    'field_06b_in': '6. Cctv No.2 In',
+    'field_06b_out': '6. Cctv No.2 Out',
+    'field_06c_in': '6. Cctv No.3 In',
+    'field_06c_out': '6. Cctv No.3 Out',
+    'field_07': '7. No. of Weighbridge Operator',
+    'field_08': '8. Void or Manual Ticket',
+    'field_09': '9. Water Spraying / Brushing',
+    'field_10': '10. Drop Barrier / Traffic Light (Vwp)',
+    'field_11': '11. Recycling Water System Room',
     
-    // ========== 重置表单到初始默认值（不清除日期和天气默认值）==========
-    function resetFormToDefault() {
-        // 重置 Inspected By
-        inspectedBy.value = '';
-        
-        // 重置所有文本框为空（清空用户输入的内容）
-        document.querySelectorAll('input[type="text"], textarea').forEach(el => {
-            if(el.id !== 'inspectedBy' && el.id !== 'inspectDate') {
-                el.value = '';
-            }
+    // Section 2: Tipping Hall (12-22)
+    'field_12a': '12. Live Floor No.1',
+    'field_12b': '12. Live Floor No.2',
+    'field_12c': '12. Live Floor No.3',
+    'field_13a': '13. Ventilation Fan No.1',
+    'field_13b': '13. Ventilation Fan No.2',
+    'field_14a': '14A. Control Operator (Count)',
+    'field_14b': '14B. Tipper Hall Assistant',
+    'field_15': '15. Lighting (Th)',
+    'field_16': '16. Fire Extinguisher Status',
+    'field_17': '17. Emergency Stop Button',
+    'field_18': '18. Conveyor Belt Status',
+    'field_19': '19. Deodorizer System',
+    'field_20': '20. Hydraulic System Pressure',
+    'field_21': '21. Access Gate / Barrier',
+    'field_22a': '22. Compactor No.1',
+    'field_22b': '22. Compactor No.2',
+    'field_22c': '22. Compactor No.3',
+    
+    // Section 3: Additional Facility (23-46)
+    'field_23': '23. Scada System',
+    'field_24': '24. Fire Alarm Panel',
+    'field_25': '25. Emergency Lighting',
+    'field_26': '26. Exit Signs',
+    'field_27': '27. First Aid Kit',
+    'field_28': '28. Ppe Compliance',
+    'field_29': '29. Housekeeping',
+    'field_30': '30. Odour Control Unit',
+    'field_31': '31. Wastewater Treatment',
+    'field_32': '32. Chemical Storage',
+    'field_33': '33. Spill Kit',
+    'field_34': '34. Vehicle Wash Bay',
+    'field_35': '35. Weighbridge Calibration',
+    'field_36': '36. Cctv Recording',
+    'field_37': '37. Traffic Signs',
+    'field_38': '38. Speed Limit',
+    'field_39': '39. Wheel Wash',
+    'field_40': '40. Drainage System',
+    'field_41': '41. Pest Control',
+    'field_42': '42. Safety Signage',
+    'field_43': '43. Radio System',
+    'field_44': '44. Generator Fuel',
+    'field_45': '45. Uv Treatment',
+    'field_46': '46. Air Compressor',
+    
+    // OEP Items 1-29
+    'oep1': 'Oep-1: Vehicle Turnaround Time > 25 Min',
+    'oep2': 'Oep-2: Queuing of Rcvs Outside Station',
+    'oep3': 'Oep-3: Vehicle Washing House',
+    'oep4': 'Oep-4: Spillage of Refuse External & Not Removed <30min',
+    'oep5': 'Oep-5: Spillage/Leachate From Trailer',
+    'oep6': 'Oep-6: Abnormal Noise',
+    'oep7': 'Oep-7: Waste Inspection (Defect Report)',
+    'oep8': 'Oep-8: Cleansing Area (4X/Day Performed)',
+    'oep9': 'Oep-9: Highway Tractor (Operate/Idle)',
+    'oep10': 'Oep-10: Highway Tractor in Maintenance (St#)',
+    'oep11': 'Oep-11: Yard Tractor (Operate/Maint/Idle)',
+    'oep12': 'Oep-12: Trailer (C#) in Maintenance',
+    'oep13': 'Oep-13: Cleanliness of Tractors & Trailers',
+    'oep14': 'Oep-14: Bobcat / Sweeper / Scrubber Drier',
+    'oep15': 'Oep-15: Backhoe Loader (Jcb) Operating at Th',
+    'oep16': 'Oep-16: Storm Drain / Catchpit',
+    'oep17': 'Oep-17: Wastewater Sample',
+    'oep18': 'Oep-18: Storm Water Sample',
+    'oep19': 'Oep-19: Influent Sample',
+    'oep20': 'Oep-20: Sludge Cake',
+    'oep21': 'Oep-21: Rsp (Boundary/Hall)',
+    'oep22': 'Oep-22: Noise Measurement',
+    'oep23': 'Oep-23: Co & No2 (Hall)',
+    'oep24': 'Oep-24: Odour Patrol (0-4)',
+    'oep25': 'Oep-25: Pest Breeding Places',
+    'oep26': 'Oep-26: Pest Control (Fogging Time)',
+    'oep27': 'Oep-27: Black Smoke',
+    'oep28': 'Oep-28: Manning Schedule (Operation Manager Present)',
+    'oep29': 'Oep-29: Visitor / Officer Record',
+    
+    // RCV Spot Check
+    'rcv_vehicle': 'Rcv Vehicle No(S).',
+    'rcv_type': 'Vehicle Type',
+    'rcv_waste_type': 'Waste Type Code',
+    'rcv_ticket': 'Ticket Number(S)',
+    'rcv_container_clean': 'Container Cleaned',
+    'rcv_remarks': 'Spot Check Remarks',
+    
+    // General
+    'general_remarks': 'Additional Remarks'
+};
+
+// 大写转换
+document.querySelectorAll('input, textarea').forEach(el => {
+    if (el.type !== 'date' && el.type !== 'time') {
+        el.addEventListener('input', function() {
+            if (this.value) this.value = this.value.toUpperCase();
         });
-        
-        // 重置所有下拉框为第一个选项（或指定的默认选项）
-        document.querySelectorAll('select').forEach(select => {
-            // 保留 shift 和 weather 的选择，其他重置
-            if(select.id !== 'shiftSelect' && select.id !== 'weatherSel') {
-                const options = select.options;
-                if(options.length > 0) {
-                    // 找到默认选中的选项（有 selected 属性的）
-                    let defaultOption = Array.from(options).find(opt => opt.hasAttribute('selected'));
-                    if(defaultOption) {
-                        select.value = defaultOption.value;
-                    } else {
-                        select.value = options[0].value;
-                    }
-                }
-            }
-        });
-        
-        // 重置 Shift 为 08:00
-        const shiftSelect = document.getElementById('shiftSelect');
-        if(shiftSelect) shiftSelect.value = '08:00';
-        
-        // 重置 Weather 为 SUNNY
-        const weatherSelect = document.getElementById('weatherSel');
-        if(weatherSelect) weatherSelect.value = 'SUNNY';
-        
-        // 重置日期为今天
-        const today = new Date().toISOString().split('T')[0];
-        const dateInput = document.getElementById('inspectDate');
-        if(dateInput) dateInput.value = today;
     }
-    
-    // ========== AUTO-SAVE 功能 ==========
-    const STORAGE_KEY = 'STTS_full_75_draft_v4';
+});
+
+// 智能 ID 转换
+const inspectedBy = document.getElementById('inspectedBy');
+function smartIdFormat(val) {
+    if (!val || !val.trim()) return val;
+    let v = val.trim().toUpperCase();
+    if (/^I\d+$/.test(v)) return v.replace(/^I/, 'I(TD)');
+    if (/^I\(TD\)\d+$/.test(v)) return v;
+    if (/^\d+$/.test(v)) return `I(TD)${v}`;
+    let m = v.match(/\d+/);
+    if (m) return `I(TD)${m[0]}`;
+    return v;
+}
+inspectedBy.addEventListener('blur', function() {
+    if (this.value && this.value.trim()) {
+        this.value = smartIdFormat(this.value);
+    }
+});
+
+// 收集表单数据
+function collectFormData() {
     const form = document.getElementById('inspectionForm');
-    const dateEl = document.getElementById('inspectDate');
-    const shiftEl = document.getElementById('shiftSelect');
-    const weatherEl = document.getElementById('weatherSel');
-    
-    function collectDraft() {
-        let fd = new FormData(form);
-        let data = { 
-            meta: { 
-                date: dateEl.value, 
-                shift: shiftEl.value, 
-                weather: weatherEl.value, 
-                inspected: inspectedBy.value 
-            }, 
-            fields: {} 
-        };
-        for(let [k,v] of fd.entries()) data.fields[k] = v;
-        return data;
-    }
-    
-    function saveDraft() { 
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(collectDraft())); 
-        showBadge('Saved'); 
-    }
-    
-    function restoreDraft() {
-        let raw = localStorage.getItem(STORAGE_KEY);
-        if(!raw) return;
-        try {
-            let d = JSON.parse(raw);
-            if(d.meta) {
-                if(d.meta.date) dateEl.value = d.meta.date;
-                if(d.meta.shift) shiftEl.value = d.meta.shift;
-                if(d.meta.weather) weatherEl.value = d.meta.weather;
-                if(d.meta.inspected) inspectedBy.value = d.meta.inspected;
-            }
-            if(d.fields) {
-                for(let [k,v] of Object.entries(d.fields)) { 
-                    let el = document.querySelector(`[name="${k}"]`); 
-                    if(el) el.value = v; 
-                }
-            }
-            showBadge('Restored');
-        } catch(e) {}
-    }
-    
-    let saveTimer;
-    function autoSave() { 
-        clearTimeout(saveTimer); 
-        saveTimer = setTimeout(saveDraft, 500); 
-    }
-    
-    function showBadge(msg) { 
-        let b = document.getElementById('autoSaveBadge'); 
-        let orig = b.innerHTML; 
-        b.innerHTML = `💾 ${msg}`; 
-        setTimeout(() => b.innerHTML = orig, 1500); 
-    }
-    
-    document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', autoSave));
-    dateEl.addEventListener('change', autoSave);
-    shiftEl.addEventListener('change', autoSave);
-    weatherEl.addEventListener('change', autoSave);
-    inspectedBy.addEventListener('input', autoSave);
-    
-    restoreDraft();
-    
-    // ========== EXCEL 导出（导出后重置所有数据）==========
-    function exportToExcel() {
-        if(!inspectedBy.value || !inspectedBy.value.trim()) { 
-            alert('❌ Please enter Inspected By (Officer ID) before exporting.'); 
-            inspectedBy.focus(); 
-            return; 
+    const elements = form.elements;
+    const data = {};
+    for (let i = 0; i < elements.length; i++) {
+        const el = elements[i];
+        if (el.name) {
+            data[el.name] = el.value;
         }
-        
-        let flat = { 
-            inspection_date: dateEl.value, 
-            shift: shiftEl.value, 
-            weather: weatherEl.value, 
-            inspected_by: inspectedBy.value 
-        };
-        
-        for(let el of form.elements) {
-            if(el.name) {
-                flat[el.name] = (typeof el.value === 'string') ? el.value.replace(/\r?\n/g, ' ').trim() : el.value;
-            }
-        }
-        
-        let headers = Object.keys(flat);
-        let row = headers.map(h => flat[h]);
-        let ws = XLSX.utils.aoa_to_sheet([headers, row]);
-        let wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'STTS_Inspection');
-        
-        let timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
-        XLSX.writeFile(wb, `STTS_Inspection_${timestamp}.xlsx`);
-        
-        // 清除 localStorage 草稿
-        localStorage.removeItem(STORAGE_KEY);
-        
-        // 重置所有表单数据（清空用户输入）
-        resetFormToDefault();
-        
-        alert('✅ Export successful! All form data has been cleared for next inspection.');
+    }
+    return data;
+}
+
+// 导出 Excel
+function exportToExcel() {
+    const date = document.getElementById('inspectDate').value;
+    const shift = document.getElementById('shiftSelect').value;
+    const inspected = document.getElementById('inspectedBy').value.trim();
+    const weather = document.getElementById('weatherSel').value;
+
+    if (!inspected) {
+        alert('Please enter Inspected By (Officer ID) before exporting.');
+        inspectedBy.focus();
+        return;
+    }
+
+    if (!date) {
+        alert('Please enter Inspection Date.');
+        return;
+    }
+
+    const formData = collectFormData();
+    
+    const flat = {
+        inspection_date: date,
+        shift: shift,
+        weather: weather,
+        inspected_by: inspected,
+        ...formData
+    };
+    
+    const headers = [];
+    const rowData = [];
+    
+    for (const [key, headerName] of Object.entries(HEADER_MAP)) {
+        headers.push(headerName);
+        rowData.push(flat[key] !== undefined ? flat[key] : '');
     }
     
-    document.getElementById('exportBtn').addEventListener('click', exportToExcel);
+    for (const [key, value] of Object.entries(flat)) {
+        if (!HEADER_MAP[key]) {
+            headers.push(key);
+            rowData.push(value);
+        }
+    }
+    
+    const ws = XLSX.utils.aoa_to_sheet([headers, rowData]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'STTS_Inspection');
+    
+    const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
+    XLSX.writeFile(wb, `STTS_Inspection_${date}_${shift}_${timestamp}.xlsx`);
+    
+    alert(`✅ Export successful!\n\nDate: ${date} | Shift: ${shift}\nOfficer: ${inspected}\n\nPlease copy this data to your 5K Master Excel file.`);
+}
+
+// 自动保存草稿
+const DRAFT_KEY = 'STTS_CURRENT_DRAFT';
+function saveDraft() {
+    const draft = {
+        date: document.getElementById('inspectDate').value,
+        shift: document.getElementById('shiftSelect').value,
+        weather: document.getElementById('weatherSel').value,
+        inspected: document.getElementById('inspectedBy').value,
+        form: collectFormData(),
+        timestamp: new Date().toISOString()
+    };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    const badge = document.getElementById('autoSaveBadge');
+    badge.innerHTML = '💾 Draft saved';
+    setTimeout(() => badge.innerHTML = '💾 Auto-saved', 1500);
+}
+
+function restoreDraft() {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return;
+    try {
+        const draft = JSON.parse(raw);
+        document.getElementById('inspectDate').value = draft.date || '2026-03-28';
+        document.getElementById('shiftSelect').value = draft.shift || '08:00';
+        document.getElementById('weatherSel').value = draft.weather || 'Sunny';
+        document.getElementById('inspectedBy').value = draft.inspected || '';
+        if (draft.form) {
+            for (const [name, value] of Object.entries(draft.form)) {
+                const el = document.querySelector(`[name="${name}"]`);
+                if (el) el.value = value;
+            }
+        }
+    } catch(e) {}
+}
+
+let draftTimer;
+function autoSaveHandler() {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(saveDraft, 500);
+}
+
+document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', autoSaveHandler);
+    el.addEventListener('change', autoSaveHandler);
+});
+
+restoreDraft();
+
+document.getElementById('exportBtn').addEventListener('click', exportToExcel);
 </script>
 </body>
 </html>
