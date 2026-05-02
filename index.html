@@ -418,8 +418,52 @@ function collectFormData() {
     }
     return data;
 }
+// ============ 清空表單所有欄位 ============
+function clearForm() {
+    // 清空所有文字輸入框和文字區域
+    document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+        if (el.id !== 'inspectedBy' && el.id !== 'checkedBy') {
+            el.value = '';
+        }
+    });
+    
+    // 清空 Inspected By 和 Checked By
+    document.getElementById('inspectedBy').value = '';
+    document.getElementById('checkedBy').value = '';
+    
+    // 重置所有下拉選單為預設值
+    document.querySelectorAll('select').forEach(select => {
+        const options = select.options;
+        if (options.length > 0) {
+            // 找到預設選中或有 selected 屬性的選項
+            let defaultOption = Array.from(options).find(opt => opt.hasAttribute('selected'));
+            if (defaultOption) {
+                select.value = defaultOption.value;
+            } else {
+                select.value = options[0].value;
+            }
+        }
+    });
+    
+    // 特別處理：重置班次為 08:00
+    const shiftSelect = document.getElementById('shiftSelect');
+    if (shiftSelect) shiftSelect.value = '08:00';
+    
+    // 特別處理：重置天氣為 Sunny
+    const weatherSelect = document.getElementById('weatherSel');
+    if (weatherSelect) weatherSelect.value = 'Sunny';
+    
+    // 日期保留今天（不清空）
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('inspectDate').value = today;
+    
+    // 清除 localStorage 中的草稿
+    localStorage.removeItem(DRAFT_KEY);
+    
+    console.log('表單已清空，準備下一次記錄');
+}
 
-// ============ Export to Excel with Descriptive Headers ============
+    // ============ Export to Excel with Descriptive Headers ============
 function exportToExcel() {
     const date = document.getElementById('inspectDate').value;
     const shift = document.getElementById('shiftSelect').value;
@@ -447,7 +491,6 @@ function exportToExcel() {
         ...formData
     };
     
-    // 使用 HEADER_MAP 生成描述性表頭
     const headers = [];
     const rowData = [];
     
@@ -456,7 +499,6 @@ function exportToExcel() {
         rowData.push(flat[key] !== undefined ? flat[key] : '');
     }
     
-    // 添加任何遺漏的欄位（確保資料完整性）
     for (const [key, value] of Object.entries(flat)) {
         if (!HEADER_MAP[key]) {
             headers.push(key);
@@ -471,7 +513,10 @@ function exportToExcel() {
     const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
     XLSX.writeFile(wb, `STTS_Inspection_${date}_${shift}_${timestamp}.xlsx`);
     
-    alert(`✅ 匯出成功！\n\n日期: ${date} | 班次: ${shift}\n檢查人員: ${inspected}`);
+    alert(`✅ 匯出成功！\n\n日期: ${date} | 班次: ${shift}\n檢查人員: ${inspected}\n\n表單已自動清空，可進行下一次檢查記錄。`);
+    
+    // 匯出成功後清空表單
+    clearForm();
 }
 
 // ============ Auto-save Draft ============
