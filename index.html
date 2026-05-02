@@ -51,7 +51,7 @@
     </div>
 
     <div class="meta-bar">
-        <div class="meta-item"><label>📅 INSPECTION DATE <span class="required-star">*</span></label><input type="date" id="inspectDate" value="2026-03-28"></div>
+        <div class="meta-item"><label>📅 INSPECTION DATE <span class="required-star">*</span></label><input type="date" id="inspectDate"></div>
         <div class="meta-item"><label>👤 INSPECTED BY <span class="required-star">*</span></label><input type="text" id="inspectedBy" placeholder="(e.g. i21 or I(TD)21)"></div>
         <div class="meta-item"><label>⏱️ SHIFT / TIME <span class="required-star">*</span></label><select id="shiftSelect"><option value="08:00">08:00</option><option value="11:00">11:00</option><option value="13:00">13:00</option><option value="16:00">16:00</option><option value="19:00">19:00</option><option value="22:00">22:00</option></select></div>
         <div class="meta-item"><label>🌦️ WEATHER</label><select id="weatherSel"><option value="Sunny">Sunny</option><option value="Cloudy">Cloudy</option><option value="Fine">Fine</option><option value="Rainy">Rainy</option></select></div>
@@ -392,6 +392,9 @@ document.querySelectorAll('input, select, textarea').forEach(el => {
     el.addEventListener('input', autoSaveHandler);
     el.addEventListener('change', autoSaveHandler);
 });
+
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('inspectDate').value = today;
 
 restoreDraft();
 
