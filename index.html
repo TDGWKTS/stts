@@ -160,10 +160,10 @@
             <div class="field-row"><span class="label">OEP-21: RSP (Site Boundary / Tipping Hall)</span><div class="input-area"><input type="text" name="oep21_time" placeholder="Time (e.g. 1548)"></div></div>
             <div class="field-row"><span class="label">OEP-22: Noise Measurement (Site Boundary / Nearby Noise Sensitive Receivers)</span><div class="input-area"><input type="text" name="oep22_time" placeholder="Time (e.g. 1548)"></div></div>
             <div class="field-row"><span class="label">OEP-23: CO & NO2 (Tipping Hall)</span><div class="input-area"><input type="text" name="oep23_time" placeholder="Time (e.g. 1548)"></div></div>
-            <div class="field-row"><span class="label">OEP-24: Odour Patrol (Site Boundary and nearby Sensitive Receivers)</span><div class="input-area"><div class="input-group"><input type="text" name="oep24_time" placeholder="(e.g. 15481549 to 15:48 - 15:49)" style="width:160px"><select name="oep24_level"><option value="0">0 (Not detected)</option><option value="1">1 (Slight)</option><option value="2">2 (Moderate)</option><option value="3">3 (Strong)</option><option value="4">4 (Extreme)</option></select></div></div></div>
-            <div class="field-row"><span class="label">OEP-25: Pest / Rodent Breeding Places Observed</span><div class="input-area"><input type="text" name="oep25_time" placeholder="Time (e.g. 1548)"></div></div>
+            <div class="field-row"><span class="label">OEP-24: Odour Patrol (Site Boundary and nearby Sensitive Receivers)</span><div class="input-area"><div class="input-group"><input type="text" name="oep24_time" placeholder="Time (e.g. 15481549)" style="width:160px"><select name="oep24_level"><option value="0">0 (Not detected)</option><option value="1">1 (Slight)</option><option value="2">2 (Moderate)</option><option value="3">3 (Strong)</option><option value="4">4 (Extreme)</option></select></div></div></div>
+            <div class="field-row"><span class="label">OEP-25: Pest / Rodent Breeding Places Observed</span><div class="input-area"><input type="text" name="oep25_time" placeholder="Yes (Time) e.g. 1548"></div></div>
             <div class="field-row"><span class="label">OEP-26: Pest / Rodent Control (Fogging)</span><div class="input-area"><input type="text" name="oep26_time" placeholder="Time (e.g. 1548)"></div></div>
-            <div class="field-row"><span class="label">OEP-27: Black Smoke from mobile plant</span><div class="input-area"><input type="text" name="oep27_time" placeholder="Time (e.g. 1548)"></div></div>
+            <div class="field-row"><span class="label">OEP-27: Black Smoke from mobile plant</span><div class="input-area"><input type="text" name="oep27_time" placeholder="Yes (Time) e.g. 1548"></div></div>
             <div class="field-row"><span class="label">OEP-28: Operation Manager</span><div class="input-area"><select name="oep28"><option value="N">N (ABSENT)</option><option value="Y">Y (PRESENT)</option></select></div></div>
             <div class="field-row"><span class="label">OEP-29: Officer / Guest Visited STTS</span><div class="input-area"><input type="text" name="oep29" placeholder="(NONE / DETAILS)"></div></div>
         </div>
@@ -199,6 +199,140 @@
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
+// ============ 描述性表頭對應（Excel 導出時使用）============
+const HEADER_MAP = {
+    // Meta 資料
+    'inspection_date': 'Inspection Date',
+    'shift': 'Shift / Time',
+    'weather': 'Weather',
+    'inspected_by': 'Inspected By',
+    'checked_by': 'Inspection Form Checked By',
+    
+    // Section 1: Water & Weighbridge (Items 1-11)
+    'field_01': '1. Industrial Water Meter Reading',
+    'field_02': '2. Waste Water Discharge Flow Meter Reading',
+    'field_03': '3. Weighbridge CPU',
+    'field_04a': '4. Status of Weighbridge No.1',
+    'field_04b': '4. Status of Weighbridge No.2',
+    'field_04c': '4. Status of Weighbridge No.3',
+    'field_05a': '5. Drop Barrier / Traffic Light No.1',
+    'field_05b': '5. Drop Barrier / Traffic Light No.2',
+    'field_05c': '5. Drop Barrier / Traffic Light No.3',
+    'field_06a': '6. CCTV No.1 (IN/OUT)',
+    'field_06b': '6. CCTV No.2 (IN/OUT)',
+    'field_06c': '6. CCTV No.3 (IN/OUT)',
+    'field_07': '7. No. of Weighbridge Operator',
+    'field_08': '8. VOID or MANUAL ticket',
+    'field_09': '9. Water Spraying / Brushing',
+    'field_10': '10. Drop Barrier / Traffic Light',
+    'field_11': '11. Recycling Water System Room',
+    
+    // Section 2: Tipping Hall (Items 12-22)
+    'field_12a': '12. Live floor No.1',
+    'field_12b': '12. Live floor No.2',
+    'field_12c': '12. Live floor No.3',
+    'field_13a': '13. Ventilation Fan No.1',
+    'field_13b': '13. Ventilation Fan No.2',
+    'field_14a': '14A. No. of Control Operator',
+    'field_14b': '14B. No. of Tipper Hall Assistant',
+    'field_15': '15. Lighting',
+    'field_16a': '16. Traffic Light Indicator (Entrance)',
+    'field_16b': '16A. Unloading Bays (Front / Rear)',
+    'field_17': '17. Water Spray nozzles',
+    'field_18': '18. Bulky Waste Shredder',
+    'field_19': '19. Cleanliness of tipping area',
+    'field_20a': '20. Final Scrubber No.1',
+    'field_20b': '20. Final Scrubber No.2',
+    'field_20c': '20A. Data Logger (Final Scrubber)',
+    'field_21a': '21. Main Fan No.1',
+    'field_21b': '21. Main Fan No.2',
+    'field_21c': '21. Main Fan No.3',
+    'field_21d': '21A. Data Logger (Main Fan)',
+    'field_22a': '22. Compactor No.1',
+    'field_22b': '22. Compactor No.2',
+    'field_22c': '22. Compactor No.3',
+    
+    // Section 3: Compactor Hall (Items 23-33)
+    'field_23a': '23. Chemicals Waste Storage (Properly stored)',
+    'field_23b': '23A. Chemicals Waste Storage (Any spillage)',
+    'field_24': '24. Lighting',
+    'field_25': '25. Filter Press Unit',
+    'field_26': '26. No. of Compactor Operator',
+    'field_26b': '26B. No. of Compactor Hall Assistant',
+    'field_27a': '27. Status of Aeration Tank SBR1',
+    'field_27b': '27. Status of Aeration Tank SBR2',
+    'field_28a': '28. Venturi Scrubber Pump P1',
+    'field_28b': '28. Venturi Scrubber Pump P2',
+    'field_29': '29. Filter Press Unit',
+    'field_30': '30. Lighting',
+    'field_31': '31. Buffer Tank with Wastewater',
+    'field_32': '32. Discharge of Wastewater',
+    'field_33': '33. Data Logger / Panel Display',
+    
+    // Section 4: Trailers & Malpractice (Items 34-39)
+    'field_34': '34. Record of Loaded Trailers - Compactor Hall',
+    'field_35': '35. Record of Loaded Trailers - Open Area',
+    'field_36': '36. Malpractice - By-pass Weighbridge',
+    'field_37': '37. Malpractice - By-pass Vehicle Wash',
+    'field_38': '38. Malpractice - Fast Speed',
+    'field_39': '39. Malpractice - Leachate Dripping',
+    
+    // Section 5: CCTV (Items 40-46)
+    'field_40': '40. CCTV - Main Entrance & Exit',
+    'field_41': '41. CCTV - Open Area around Weighbridges',
+    'field_42': '42. CCTV - Back Yard Area',
+    'field_43': '43. CCTV - Wastewater Treatment Plant',
+    'field_44': '44. CCTV - Compactor Hall',
+    'field_45': '45. CCTV - Workshop',
+    'field_46': '46. CCTV - Tipping Hall',
+    
+    // OEP Items 1-29
+    'oep1': 'OEP-1: Vehicle Turnaround Time > 25 min',
+    'oep2': 'OEP-2: Queuing of RCVs outside the Station',
+    'oep3': 'OEP-3: Vehicle Washing House',
+    'oep4': 'OEP-4: Spillage of Refuse at any External Location & Not Properly Removed within 30 min',
+    'oep5': 'OEP-5: Spillage of Refuse/Leakage of Leachate from Trailer',
+    'oep6': 'OEP-6: Abnormal Noise',
+    'oep7': 'OEP-7: Waste Inspection',
+    'oep8': 'OEP-8: Cleansing of the "Cleansing Area" (4 times per day)',
+    'oep9': 'OEP-9: No. of Highway Tractor (Operate / Idle)',
+    'oep10': 'OEP-10: Highway Tractor (ST#) in Maintenance',
+    'oep11': 'OEP-11: No. of Yard Tractor (Operate / Maintenance / Idle)',
+    'oep12': 'OEP-12: Trailer (C#) in Maintenance',
+    'oep13': 'OEP-13: Cleanliness of Tractors and Trailers Body',
+    'oep14': 'OEP-14: Bobcat / Sweeper / Scrubber Drier',
+    'oep15': 'OEP-15: No. of backhoe loader (JCB) operate at tipping hall',
+    'oep16': 'OEP-16: Storm Drain Channel / Catchpit Condition',
+    'oep17_lab': 'OEP-17: Wastewater Sample Lab',
+    'oep17_time': 'OEP-17: Wastewater Sample Time',
+    'oep18_lab': 'OEP-18: Storm Water Sample Lab',
+    'oep18_time': 'OEP-18: Storm Water Sample Time',
+    'oep19_time': 'OEP-19: Influent Sample Time',
+    'oep20_lab': 'OEP-20: Sludge Cake Lab',
+    'oep20_time': 'OEP-20: Sludge Cake Time',
+    'oep21_time': 'OEP-21: RSP Time',
+    'oep22_time': 'OEP-22: Noise Measurement Time',
+    'oep23_time': 'OEP-23: CO & NO2 Time',
+    'oep24_time': 'OEP-24: Odour Patrol Time',
+    'oep24_level': 'OEP-24: Mal-odour detected (0-4)',
+    'oep25_time': 'OEP-25: Pest/Rodent Breeding Places (Time)',
+    'oep26_time': 'OEP-26: Pest/Rodent Control Fogging Time',
+    'oep27_time': 'OEP-27: Black Smoke Time',
+    'oep28': 'OEP-28: Operation Manager',
+    'oep29': 'OEP-29: Officer / Guest Visited STTS',
+    
+    // RCV Spot Check
+    'rcv_vehicle': 'RCV Vehicle No(s).',
+    'rcv_type': 'V Type',
+    'rcv_waste_type': 'Waste Type',
+    'rcv_ticket': 'TICKET NO.',
+    'rcv_container_clean': 'Container Cleaned',
+    'rcv_remarks': 'Spot Check Remarks',
+    
+    // General
+    'general_remarks': 'Remarks'
+};
+
 // ============ Smart Time Formatting Functions ============
 function formatTime(input) {
     if (!input) return input;
@@ -218,16 +352,12 @@ function formatTimeOnBlur(inputEl) {
     }
 }
 
-// Apply time formatting to all time input fields
 document.querySelectorAll('input[name$="_time"], input[name*="time"]').forEach(el => {
     el.addEventListener('blur', () => formatTimeOnBlur(el));
 });
 
-// OEP-24 time range
 const oep24Time = document.querySelector('input[name="oep24_time"]');
-if (oep24Time) {
-    oep24Time.addEventListener('blur', () => formatTimeOnBlur(oep24Time));
-}
+if (oep24Time) oep24Time.addEventListener('blur', () => formatTimeOnBlur(oep24Time));
 
 // ============ Smart ID Conversion ============
 function smartIdFormat(val) {
@@ -236,14 +366,12 @@ function smartIdFormat(val) {
     if (/^I\d+$/.test(v)) return v.replace(/^I/, 'I(TD)');
     if (/^[A-Z]{2}\d+$/.test(v)) return v.replace(/^([A-Z]{2})(\d+)$/, '$1(TD)$2');
     if (/^I\(TD\)\d+$/.test(v)) return v;
-    if (/^[A-Z]{2}\(TD\)\d+$/.test(v)) return v;
+    if (/^SI\(TD\)\d+$/.test(v)) return v;
     if (/^\d+$/.test(v)) return `I(TD)${v}`;
     let m = v.match(/\d+/);
     if (m) {
         let prefix = v.replace(/\d+/, '').trim();
-        if (prefix.length >= 2) {
-            return prefix.substring(0,2).toUpperCase() + '(TD)' + m[0];
-        }
+        if (prefix.length >= 2) return prefix.substring(0,2).toUpperCase() + '(TD)' + m[0];
         return `I(TD)${m[0]}`;
     }
     return v;
@@ -253,9 +381,7 @@ const inspectedBy = document.getElementById('inspectedBy');
 const checkedBy = document.getElementById('checkedBy');
 
 function applySmartId(inputEl) {
-    if (inputEl.value && inputEl.value.trim()) {
-        inputEl.value = smartIdFormat(inputEl.value);
-    }
+    if (inputEl.value && inputEl.value.trim()) inputEl.value = smartIdFormat(inputEl.value);
 }
 
 inspectedBy.addEventListener('blur', () => applySmartId(inspectedBy));
@@ -268,12 +394,8 @@ function smartCapitalize(str) {
     let words = str.split(' ');
     let result = words.map(word => {
         let upperWord = word.toUpperCase();
-        if (keepUpper.includes(upperWord)) {
-            return upperWord;
-        }
-        if (word.length > 0) {
-            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-        }
+        if (keepUpper.includes(upperWord)) return upperWord;
+        if (word.length > 0) return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
         return word;
     });
     return result.join(' ');
@@ -281,11 +403,7 @@ function smartCapitalize(str) {
 
 document.querySelectorAll('input[type="text"], textarea').forEach(el => {
     if (el.id !== 'inspectedBy' && el.id !== 'checkedBy' && !el.name.includes('_time') && el.name !== 'oep24_time' && !el.name.includes('_lab')) {
-        el.addEventListener('blur', function() {
-            if (this.value) {
-                this.value = smartCapitalize(this.value);
-            }
-        });
+        el.addEventListener('blur', function() { if (this.value) this.value = smartCapitalize(this.value); });
     }
 });
 
@@ -296,14 +414,12 @@ function collectFormData() {
     const data = {};
     for (let i = 0; i < elements.length; i++) {
         const el = elements[i];
-        if (el.name) {
-            data[el.name] = el.value;
-        }
+        if (el.name) data[el.name] = el.value;
     }
     return data;
 }
 
-// ============ Export to Excel ============
+// ============ Export to Excel with Descriptive Headers ============
 function exportToExcel() {
     const date = document.getElementById('inspectDate').value;
     const shift = document.getElementById('shiftSelect').value;
@@ -315,7 +431,6 @@ function exportToExcel() {
         inspectedBy.focus();
         return;
     }
-
     if (!date) {
         alert('請選擇巡查日期');
         return;
@@ -332,8 +447,22 @@ function exportToExcel() {
         ...formData
     };
     
-    const headers = Object.keys(flat);
-    const rowData = headers.map(h => flat[h]);
+    // 使用 HEADER_MAP 生成描述性表頭
+    const headers = [];
+    const rowData = [];
+    
+    for (const [key, headerName] of Object.entries(HEADER_MAP)) {
+        headers.push(headerName);
+        rowData.push(flat[key] !== undefined ? flat[key] : '');
+    }
+    
+    // 添加任何遺漏的欄位（確保資料完整性）
+    for (const [key, value] of Object.entries(flat)) {
+        if (!HEADER_MAP[key]) {
+            headers.push(key);
+            rowData.push(value);
+        }
+    }
     
     const ws = XLSX.utils.aoa_to_sheet([headers, rowData]);
     const wb = XLSX.utils.book_new();
@@ -368,11 +497,11 @@ function restoreDraft() {
     if (!raw) return;
     try {
         const draft = JSON.parse(raw);
-        document.getElementById('inspectDate').value = draft.date || '2026-03-28';
-        document.getElementById('shiftSelect').value = draft.shift || '08:00';
-        document.getElementById('weatherSel').value = draft.weather || 'Sunny';
-        document.getElementById('inspectedBy').value = draft.inspected || '';
-        document.getElementById('checkedBy').value = draft.checked || '';
+        if (draft.date) document.getElementById('inspectDate').value = draft.date;
+        if (draft.shift) document.getElementById('shiftSelect').value = draft.shift;
+        if (draft.weather) document.getElementById('weatherSel').value = draft.weather;
+        if (draft.inspected) document.getElementById('inspectedBy').value = draft.inspected;
+        if (draft.checked) document.getElementById('checkedBy').value = draft.checked;
         if (draft.form) {
             for (const [name, value] of Object.entries(draft.form)) {
                 const el = document.querySelector(`[name="${name}"]`);
@@ -393,8 +522,11 @@ document.querySelectorAll('input, select, textarea').forEach(el => {
     el.addEventListener('change', autoSaveHandler);
 });
 
+// 設置日期默認為今天
 const today = new Date().toISOString().split('T')[0];
-document.getElementById('inspectDate').value = today;
+if (!document.getElementById('inspectDate').value) {
+    document.getElementById('inspectDate').value = today;
+}
 
 restoreDraft();
 
