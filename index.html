@@ -2,51 +2,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>STTS Daily Inspection Form</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #e9f0ee; font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif; padding: 24px 16px; }
-        .form-container { max-width: 1100px; margin: 0 auto; background: white; border-radius: 32px; box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08); overflow: hidden; }
-        .doc-header { background: #004d40; padding: 22px 28px; color: white; }
-        .doc-header h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: 1px; }
-        .doc-header .sub { font-size: 0.85rem; opacity: 0.85; margin-top: 6px; line-height: 1.4; }
-        .meta-bar { background: #f9fcfb; padding: 16px 28px; display: flex; flex-wrap: wrap; gap: 28px; border-bottom: 1px solid #d4e2de; align-items: center; }
-        .meta-item { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-        .meta-item label { font-weight: 700; color: #00695c; font-size: 0.85rem; }
+        body { background: #e9f0ee; font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif; padding: 16px 12px; }
+        .form-container { max-width: 1100px; margin: 0 auto; background: white; border-radius: 24px; box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08); overflow: hidden; }
+        .doc-header { background: #004d40; padding: 18px 20px; color: white; }
+        
+        /* 桌面版標題字體 */
+        .doc-header h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: 1px; }
+        .doc-header .sub { font-size: 0.75rem; opacity: 0.85; margin-top: 6px; line-height: 1.4; }
+        
+        .meta-bar { background: #f9fcfb; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #d4e2de; align-items: center; }
+        .meta-item { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+        .meta-item label { font-weight: 700; color: #00695c; font-size: 0.8rem; }
         .required-star { color: #c62828; }
         
         input::placeholder, textarea::placeholder { color: #9e9e9e !important; font-style: italic !important; font-weight: 400 !important; opacity: 1 !important; }
-        input, select, textarea { padding: 8px 16px; border-radius: 40px; border: 1px solid #cbdcd6; background: white; font-family: 'Courier New', monospace; font-weight: 500; font-size: 0.85rem; }
+        input, select, textarea { padding: 8px 12px; border-radius: 40px; border: 1px solid #cbdcd6; background: white; font-family: 'Courier New', monospace; font-weight: 500; font-size: 0.8rem; }
         textarea { border-radius: 20px; }
         .section { margin-top: 2px; }
-        .section-title { background: #e0f2f1; padding: 12px 28px; font-weight: 800; font-size: 1.1rem; color: #004d40; border-left: 6px solid #00897b; margin-top: 8px; }
-        .field-row { padding: 12px 28px; border-bottom: 1px solid #edf3f0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
-        .field-row .label { font-weight: 700; font-size: 0.85rem; color: #1a3e36; min-width: 300px; width: 40%; }
-        .field-row .input-area { flex: 1; min-width: 180px; }
-        .input-group { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-        .input-group select, .input-group input { width: auto; flex: 1; min-width: 100px; }
+        .section-title { background: #e0f2f1; padding: 10px 20px; font-weight: 800; font-size: 1rem; color: #004d40; border-left: 6px solid #00897b; margin-top: 8px; }
+        .field-row { padding: 10px 16px; border-bottom: 1px solid #edf3f0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+        .field-row .label { font-weight: 700; font-size: 0.8rem; color: #1a3e36; min-width: 200px; width: 35%; word-break: break-word; }
+        .field-row .input-area { flex: 1; min-width: 150px; }
+        .input-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .input-group select, .input-group input { width: auto; flex: 1; min-width: 80px; }
         select, input, textarea { width: 100%; }
-        .inline-cluster { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-        .inline-cluster select { width: auto; min-width: 80px; }
-        .cctv-group { display: flex; flex-wrap: wrap; gap: 16px; background: #fafefc; padding: 8px 0; }
-        .cctv-unit { background: #f4f9f7; padding: 6px 12px; border-radius: 48px; display: inline-flex; gap: 12px; align-items: center; }
+        .inline-cluster { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .inline-cluster select { width: auto; min-width: 70px; }
+        .cctv-group { display: flex; flex-wrap: wrap; gap: 12px; background: #fafefc; padding: 6px 0; }
+        .cctv-unit { background: #f4f9f7; padding: 4px 10px; border-radius: 48px; display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
         
-        .button-wrapper { display: flex; margin: 24px 28px 20px 28px; }
-        .btn-primary { flex: 1; background: #00695c; border: none; padding: 14px; font-weight: bold; font-size: 1rem; border-radius: 60px; color: white; cursor: pointer; transition: 0.2s; }
+        .button-wrapper { display: flex; margin: 20px 20px 16px 20px; }
+        .btn-primary { flex: 1; background: #00695c; border: none; padding: 12px; font-weight: bold; font-size: 0.9rem; border-radius: 60px; color: white; cursor: pointer; transition: 0.2s; }
         .btn-primary:hover { background: #00897b; }
         
-        .legend { background: #fff7e5; padding: 12px 28px; font-size: 0.7rem; color: #a86407; border-top: 1px solid #ffe0b5; }
-        .legend p { margin: 4px 0; }
-        .auto-save-badge { background: #e8f5e9; border-radius: 40px; padding: 6px 14px; font-size: 0.75rem; font-weight: 600; color: #2e7d32; display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
+        .legend { background: #fff7e5; padding: 10px 16px; font-size: 0.65rem; color: #a86407; border-top: 1px solid #ffe0b5; }
+        .legend p { margin: 3px 0; }
+        .auto-save-badge { background: #e8f5e9; border-radius: 40px; padding: 4px 10px; font-size: 0.7rem; font-weight: 600; color: #2e7d32; display: inline-flex; align-items: center; gap: 4px; margin-left: auto; }
         
-        @media (max-width: 700px) { .field-row { flex-direction: column; align-items: flex-start; } .field-row .label { width: 100%; } .button-wrapper { flex-direction: column; } .input-group { flex-direction: column; align-items: stretch; } }
+        /* ========== 手機版專用樣式 ========== */
+        @media (max-width: 700px) {
+            body { padding: 12px 8px; }
+            .form-container { border-radius: 20px; }
+            .doc-header { padding: 14px 16px; }
+            .doc-header h1 { font-size: 1.1rem; }  /* 手機版標題縮小 */
+            .doc-header .sub { font-size: 0.65rem; }
+            .meta-bar { padding: 12px 16px; gap: 12px; }
+            .meta-item { gap: 6px; }
+            .meta-item label { font-size: 0.75rem; }
+            .section-title { padding: 8px 16px; font-size: 0.9rem; }
+            .field-row { flex-direction: column; align-items: flex-start; padding: 10px 14px; gap: 8px; }
+            .field-row .label { width: 100%; min-width: unset; font-size: 0.75rem; }
+            .field-row .input-area { width: 100%; min-width: unset; }
+            .inline-cluster { width: 100%; justify-content: space-between; }
+            .inline-cluster select { flex: 1; min-width: 60px; }
+            .cctv-group { width: 100%; flex-direction: column; gap: 8px; }
+            .cctv-unit { width: 100%; justify-content: space-between; }
+            .input-group { width: 100%; flex-direction: column; align-items: stretch; gap: 6px; }
+            .input-group select, .input-group input { width: 100%; }
+            button { font-size: 0.85rem; padding: 10px; }
+            .legend { font-size: 0.6rem; padding: 8px 12px; }
+            .auto-save-badge { font-size: 0.65rem; }
+        }
+        
+        /* 平板橫向優化 */
+        @media (min-width: 701px) and (max-width: 900px) {
+            .field-row .label { min-width: 220px; width: 38%; }
+            .doc-header h1 { font-size: 1.3rem; }
+        }
     </style>
 </head>
 <body>
 <div class="form-container">
     <div class="doc-header">
-        <h1>DAILY INSPECTION FORM FOR SHA TIN TRANSFER STATION</h1>
+        <h1>DAILY INSPECTION FORM<br>SHA TIN TRANSFER STATION</h1>
         <div class="sub">CONTRACT EP/SP/76/14<br>DOIF-STTS-002-V2 | ver. 5/21</div>
     </div>
 
@@ -67,14 +99,14 @@
             <div class="field-row"><span class="label">4. Status of Weighbridge (No.1/2/3)</span><div class="inline-cluster"><select name="field_04a"><option value="Y">No.1 Y</option><option value="X">X</option></select><select name="field_04b"><option value="Y">No.2 Y</option><option value="X">X</option></select><select name="field_04c"><option value="Y">No.3 Y</option><option value="X">X</option></select></div></div>
             <div class="field-row"><span class="label">5. Drop Barrier / Traffic Light (No.1/2/3)</span><div class="inline-cluster"><select name="field_05a"><option value="Y">No.1 Y</option><option value="X">X</option></select><select name="field_05b"><option value="Y">No.2 Y</option><option value="X">X</option></select><select name="field_05c"><option value="Y">No.3 Y</option><option value="X">X</option></select></div></div>
             <div class="field-row"><span class="label">6. CCTV (No.1/2/3 IN/OUT)</span><div class="cctv-group">
-                <div class="cctv-unit">No.1:<select name="field_06a"><option value="Y/Y">Y/Y</option><option value="N/N">N/N</option><option value="Y/N">Y/N</option><option value="N/Y">N/Y</option></select></div>
-                <div class="cctv-unit">No.2:<select name="field_06b"><option value="Y/Y">Y/Y</option><option value="N/N">N/N</option><option value="Y/N">Y/N</option><option value="N/Y">N/Y</option></select></div>
-                <div class="cctv-unit">No.3:<select name="field_06c"><option value="Y/Y">Y/Y</option><option value="N/N">N/N</option><option value="Y/N">Y/N</option><option value="N/Y">N/Y</option></select></div>
+                <div class="cctv-unit">No.1:<select name="field_06a"><option value="Y / Y">Y / Y</option><option value="N / N">N / N</option><option value="Y / N">Y / N</option><option value="N / Y">N / Y</option></select></div>
+                <div class="cctv-unit">No.2:<select name="field_06b"><option value="Y / Y">Y / Y</option><option value="N / N">N / N</option><option value="Y / N">Y / N</option><option value="N / Y">N / Y</option></select></div>
+                <div class="cctv-unit">No.3:<select name="field_06c"><option value="Y / Y">Y / Y</option><option value="N / N">N / N</option><option value="Y / N">Y / N</option><option value="N / Y">N / Y</option></select></div>
             </div></div>
             <div class="field-row"><span class="label">7. No. of Weighbridge Operator</span><div class="input-area"><input type="text" name="field_07" placeholder="(number)"></div></div>
             <div class="field-row"><span class="label">8. VOID or MANUAL ticket</span><div class="input-area"><select name="field_08"><option value="N">N</option><option value="Y">Y</option></select></div></div>
-            <div class="field-row"><span class="label">9. Water Spraying / Brushing</span><div class="input-area"><select name="field_09"><option value="Y/NA">Y/NA</option><option value="N/NA">N/NA</option></select></div></div>
-            <div class="field-row"><span class="label">10. Drop Barrier / Traffic Light</span><div class="input-area"><select name="field_10"><option value="Y/Y">Y/Y</option><option value="N/N">N/N</option><option value="Y/N">Y/N</option><option value="N/Y">N/Y</option></select></div></div>
+            <div class="field-row"><span class="label">9. Water Spraying / Brushing</span><div class="input-area"><select name="field_09"><option value="Y / NA">Y / NA</option><option value="N / NA">N / NA</option></select></div></div>
+            <div class="field-row"><span class="label">10. Drop Barrier / Traffic Light</span><div class="input-area"><select name="field_10"><option value="Y / Y">Y / Y</option><option value="N / N">N / N</option><option value="Y / N">Y / N</option><option value="N / Y">N / Y</option></select></div></div>
             <div class="field-row"><span class="label">11. Recycling Water System Room</span><div class="input-area"><select name="field_11"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
         </div>
 
@@ -86,7 +118,7 @@
             <div class="field-row"><span class="label">14B. No. of Tipper Hall Assistant</span><div class="input-area"><input type="text" name="field_14b" placeholder="(count)"></div></div>
             <div class="field-row"><span class="label">15. Lighting</span><div class="input-area"><select name="field_15"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
             <div class="field-row"><span class="label">16. Traffic Light Indicator (Entrance)</span><div class="input-area"><select name="field_16a"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">16A. Unloading Bays (Front / Rear)</span><div class="input-area"><select name="field_16b"><option value="Y/Y">Y/Y</option><option value="N/N">N/N</option><option value="Y/N">Y/N</option><option value="N/Y">N/Y</option></select></div></div>
+            <div class="field-row"><span class="label">16A. Unloading Bays (Front / Rear)</span><div class="input-area"><select name="field_16b"><option value="Y / Y">Y / Y</option><option value="N / N">N / N</option><option value="Y / N">Y / N</option><option value="N / Y">N / Y</option></select></div></div>
             <div class="field-row"><span class="label">17. Water Spray nozzles</span><div class="input-area"><select name="field_17"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
             <div class="field-row"><span class="label">18. Bulky Waste Shredder</span><div class="input-area"><select name="field_18"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
             <div class="field-row"><span class="label">19. Cleanliness of tipping area</span><div class="input-area"><select name="field_19"><option value="Y">Y (CLEAN)</option><option value="X">X (DIRTY)</option></select></div></div>
@@ -111,7 +143,7 @@
             <div class="field-row"><span class="label">30. Lighting</span><div class="input-area"><select name="field_30"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
             <div class="field-row"><span class="label">31. Buffer Tank with Wastewater</span><div class="input-area"><select name="field_31"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
             <div class="field-row"><span class="label">32. Discharge of Wastewater</span><div class="input-area"><select name="field_32"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
-            <div class="field-row"><span class="label">33. Data Logger / Panel Display</span><div class="input-area"><select name="field_33"><option value="Y/Y">Y/Y</option><option value="N/N">N/N</option><option value="Y/N">Y/N</option><option value="N/Y">N/Y</option></select></div></div>
+            <div class="field-row"><span class="label">33. Data Logger / Panel Display</span><div class="input-area"><select name="field_33"><option value="Y / Y">Y / Y</option><option value="N / N">N / N</option><option value="Y / N">Y / N</option><option value="N / Y">N / Y</option></select></div></div>
         </div>
 
         <!-- SECTION 4: RECORD OF LOADED TRAILERS & MALPRACTICE (Items 34-39) -->
@@ -201,14 +233,11 @@
 <script>
 // ============ 描述性表頭對應（Excel 導出時使用）============
 const HEADER_MAP = {
-    // Meta 資料
     'inspection_date': 'Inspection Date',
     'shift': 'Shift / Time',
     'weather': 'Weather',
     'inspected_by': 'Inspected By',
     'checked_by': 'Inspection Form Checked By',
-    
-    // Section 1: Water & Weighbridge (Items 1-11)
     'field_01': '1. Industrial Water Meter Reading',
     'field_02': '2. Waste Water Discharge Flow Meter Reading',
     'field_03': '3. Weighbridge CPU',
@@ -226,8 +255,6 @@ const HEADER_MAP = {
     'field_09': '9. Water Spraying / Brushing',
     'field_10': '10. Drop Barrier / Traffic Light',
     'field_11': '11. Recycling Water System Room',
-    
-    // Section 2: Tipping Hall (Items 12-22)
     'field_12a': '12. Live floor No.1',
     'field_12b': '12. Live floor No.2',
     'field_12c': '12. Live floor No.3',
@@ -251,8 +278,6 @@ const HEADER_MAP = {
     'field_22a': '22. Compactor No.1',
     'field_22b': '22. Compactor No.2',
     'field_22c': '22. Compactor No.3',
-    
-    // Section 3: Compactor Hall (Items 23-33)
     'field_23a': '23. Chemicals Waste Storage (Properly stored)',
     'field_23b': '23A. Chemicals Waste Storage (Any spillage)',
     'field_24': '24. Lighting',
@@ -268,16 +293,12 @@ const HEADER_MAP = {
     'field_31': '31. Buffer Tank with Wastewater',
     'field_32': '32. Discharge of Wastewater',
     'field_33': '33. Data Logger / Panel Display',
-    
-    // Section 4: Trailers & Malpractice (Items 34-39)
     'field_34': '34. Record of Loaded Trailers - Compactor Hall',
     'field_35': '35. Record of Loaded Trailers - Open Area',
     'field_36': '36. Malpractice - By-pass Weighbridge',
     'field_37': '37. Malpractice - By-pass Vehicle Wash',
     'field_38': '38. Malpractice - Fast Speed',
     'field_39': '39. Malpractice - Leachate Dripping',
-    
-    // Section 5: CCTV (Items 40-46)
     'field_40': '40. CCTV - Main Entrance & Exit',
     'field_41': '41. CCTV - Open Area around Weighbridges',
     'field_42': '42. CCTV - Back Yard Area',
@@ -285,8 +306,6 @@ const HEADER_MAP = {
     'field_44': '44. CCTV - Compactor Hall',
     'field_45': '45. CCTV - Workshop',
     'field_46': '46. CCTV - Tipping Hall',
-    
-    // OEP Items 1-29
     'oep1': 'OEP-1: Vehicle Turnaround Time > 25 min',
     'oep2': 'OEP-2: Queuing of RCVs outside the Station',
     'oep3': 'OEP-3: Vehicle Washing House',
@@ -320,36 +339,26 @@ const HEADER_MAP = {
     'oep27_time': 'OEP-27: Black Smoke Time',
     'oep28': 'OEP-28: Operation Manager',
     'oep29': 'OEP-29: Officer / Guest Visited STTS',
-    
-    // RCV Spot Check
     'rcv_vehicle': 'RCV Vehicle No(s).',
     'rcv_type': 'V Type',
     'rcv_waste_type': 'Waste Type',
     'rcv_ticket': 'TICKET NO.',
     'rcv_container_clean': 'Container Cleaned',
     'rcv_remarks': 'Spot Check Remarks',
-    
-    // General
     'general_remarks': 'Remarks'
 };
 
-// ============ Smart Time Formatting Functions ============
+// ============ Smart Time Formatting ============
 function formatTime(input) {
     if (!input) return input;
     let str = input.toString().trim();
-    if (/^\d{4}$/.test(str)) {
-        return str.substring(0,2) + ":" + str.substring(2,4);
-    }
-    if (/^\d{8}$/.test(str)) {
-        return str.substring(0,2) + ":" + str.substring(2,4) + " - " + str.substring(4,6) + ":" + str.substring(6,8);
-    }
+    if (/^\d{4}$/.test(str)) return str.substring(0,2) + ":" + str.substring(2,4);
+    if (/^\d{8}$/.test(str)) return str.substring(0,2) + ":" + str.substring(2,4) + " - " + str.substring(4,6) + ":" + str.substring(6,8);
     return str;
 }
 
 function formatTimeOnBlur(inputEl) {
-    if (inputEl.value) {
-        inputEl.value = formatTime(inputEl.value);
-    }
+    if (inputEl.value) inputEl.value = formatTime(inputEl.value);
 }
 
 document.querySelectorAll('input[name$="_time"], input[name*="time"]').forEach(el => {
@@ -418,52 +427,36 @@ function collectFormData() {
     }
     return data;
 }
-// ============ 清空表單所有欄位 ============
+
+// ============ Clear Form ============
 function clearForm() {
-    // 清空所有文字輸入框和文字區域
     document.querySelectorAll('input[type="text"], textarea').forEach(el => {
-        if (el.id !== 'inspectedBy' && el.id !== 'checkedBy') {
-            el.value = '';
-        }
+        if (el.id !== 'inspectedBy' && el.id !== 'checkedBy') el.value = '';
     });
-    
-    // 清空 Inspected By 和 Checked By
     document.getElementById('inspectedBy').value = '';
     document.getElementById('checkedBy').value = '';
     
-    // 重置所有下拉選單為預設值
     document.querySelectorAll('select').forEach(select => {
         const options = select.options;
         if (options.length > 0) {
-            // 找到預設選中或有 selected 屬性的選項
             let defaultOption = Array.from(options).find(opt => opt.hasAttribute('selected'));
-            if (defaultOption) {
-                select.value = defaultOption.value;
-            } else {
-                select.value = options[0].value;
-            }
+            if (defaultOption) select.value = defaultOption.value;
+            else select.value = options[0].value;
         }
     });
     
-    // 特別處理：重置班次為 08:00
     const shiftSelect = document.getElementById('shiftSelect');
     if (shiftSelect) shiftSelect.value = '08:00';
-    
-    // 特別處理：重置天氣為 Sunny
     const weatherSelect = document.getElementById('weatherSel');
     if (weatherSelect) weatherSelect.value = 'Sunny';
     
-    // 日期保留今天（不清空）
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('inspectDate').value = today;
     
-    // 清除 localStorage 中的草稿
     localStorage.removeItem(DRAFT_KEY);
-    
-    console.log('表單已清空，準備下一次記錄');
 }
 
-    // ============ Export to Excel with Descriptive Headers ============
+// ============ Export to Excel ============
 function exportToExcel() {
     const date = document.getElementById('inspectDate').value;
     const shift = document.getElementById('shiftSelect').value;
@@ -515,7 +508,6 @@ function exportToExcel() {
     
     alert(`✅ 匯出成功！\n\n日期: ${date} | 班次: ${shift}\n檢查人員: ${inspected}\n\n表單已自動清空，可進行下一次檢查記錄。`);
     
-    // 匯出成功後清空表單
     clearForm();
 }
 
@@ -567,7 +559,6 @@ document.querySelectorAll('input, select, textarea').forEach(el => {
     el.addEventListener('change', autoSaveHandler);
 });
 
-// 設置日期默認為今天
 const today = new Date().toISOString().split('T')[0];
 if (!document.getElementById('inspectDate').value) {
     document.getElementById('inspectDate').value = today;
