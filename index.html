@@ -9,11 +9,8 @@
         body { background: #e9f0ee; font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif; padding: 16px 12px; }
         .form-container { max-width: 1100px; margin: 0 auto; background: white; border-radius: 24px; box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08); overflow: hidden; }
         .doc-header { background: #004d40; padding: 18px 20px; color: white; }
-        
-        /* 桌面版標題字體 */
         .doc-header h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: 1px; }
         .doc-header .sub { font-size: 0.75rem; opacity: 0.85; margin-top: 6px; line-height: 1.4; }
-        
         .meta-bar { background: #f9fcfb; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #d4e2de; align-items: center; }
         .meta-item { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
         .meta-item label { font-weight: 700; color: #00695c; font-size: 0.8rem; }
@@ -43,12 +40,11 @@
         .legend p { margin: 3px 0; }
         .auto-save-badge { background: #e8f5e9; border-radius: 40px; padding: 4px 10px; font-size: 0.7rem; font-weight: 600; color: #2e7d32; display: inline-flex; align-items: center; gap: 4px; margin-left: auto; }
         
-        /* ========== 手機版專用樣式 ========== */
         @media (max-width: 700px) {
             body { padding: 12px 8px; }
             .form-container { border-radius: 20px; }
             .doc-header { padding: 14px 16px; }
-            .doc-header h1 { font-size: 1.1rem; }  /* 手機版標題縮小 */
+            .doc-header h1 { font-size: 1.1rem; }
             .doc-header .sub { font-size: 0.65rem; }
             .meta-bar { padding: 12px 16px; gap: 12px; }
             .meta-item { gap: 6px; }
@@ -68,7 +64,6 @@
             .auto-save-badge { font-size: 0.65rem; }
         }
         
-        /* 平板橫向優化 */
         @media (min-width: 701px) and (max-width: 900px) {
             .field-row .label { min-width: 220px; width: 38%; }
             .doc-header h1 { font-size: 1.3rem; }
@@ -83,7 +78,7 @@
     </div>
 
     <div class="meta-bar">
-        <div class="meta-item"><label>📅 INSPECTION DATE <span class="required-star">*</span></label><input type="date" id="inspectDate"></div>
+        <div class="meta-item"><label>📅 INSPECTION DATE <span class="required-star">*</span></label><input type="text" id="inspectDate" placeholder="dd/mm/yyyy"></div>
         <div class="meta-item"><label>👤 INSPECTED BY <span class="required-star">*</span></label><input type="text" id="inspectedBy" placeholder="(e.g. i21 or I(TD)21)"></div>
         <div class="meta-item"><label>⏱️ SHIFT / TIME <span class="required-star">*</span></label><select id="shiftSelect"><option value="08:00">08:00</option><option value="11:00">11:00</option><option value="13:00">13:00</option><option value="16:00">16:00</option><option value="19:00">19:00</option><option value="22:00">22:00</option></select></div>
         <div class="meta-item"><label>🌦️ WEATHER</label><select id="weatherSel"><option value="Sunny">Sunny</option><option value="Cloudy">Cloudy</option><option value="Fine">Fine</option><option value="Rainy">Rainy</option></select></div>
@@ -105,7 +100,7 @@
             </div></div>
             <div class="field-row"><span class="label">7. No. of Weighbridge Operator</span><div class="input-area"><input type="text" name="field_07" placeholder="(number)"></div></div>
             <div class="field-row"><span class="label">8. VOID or MANUAL ticket</span><div class="input-area"><select name="field_08"><option value="N">N</option><option value="Y">Y</option></select></div></div>
-            <div class="field-row"><span class="label">9. Water Spraying / Brushing</span><div class="input-area"><select name="field_09"><option value="Y / NA">Y / NA</option><option value="N / NA">N / NA</option></select></div></div>
+            <div class="field-row"><span class="label">9. Water Spraying / Brushing</span><div class="input-area"><input type="text" name="field_09" placeholder="e.g. y na -> Y / NA"></div></div>
             <div class="field-row"><span class="label">10. Drop Barrier / Traffic Light</span><div class="input-area"><select name="field_10"><option value="Y / Y">Y / Y</option><option value="N / N">N / N</option><option value="Y / N">Y / N</option><option value="N / Y">N / Y</option></select></div></div>
             <div class="field-row"><span class="label">11. Recycling Water System Room</span><div class="input-area"><select name="field_11"><option value="Y">Y (OK)</option><option value="X">X (FAULT)</option></select></div></div>
         </div>
@@ -178,11 +173,11 @@
             <div class="field-row"><span class="label">OEP-7: Waste Inspection</span><div class="input-area"><select name="oep7"><option value="N">N</option><option value="Y">Y</option></select></div></div>
             <div class="field-row"><span class="label">OEP-8: Cleansing of the "Cleansing Area" (4 times per day)</span><div class="input-area"><select name="oep8"><option value="Y">Y</option><option value="N">N</option></select></div></div>
             <div class="field-row"><span class="label">OEP-9: No. of Highway Tractor (Operate / Idle)</span><div class="input-area"><input type="text" name="oep9" placeholder="(e.g. 16 / 8)"></div></div>
-            <div class="field-row"><span class="label">OEP-10: Highway Tractor (ST#) in Maintenance</span><div class="input-area"><input type="text" name="oep10" placeholder="(e.g. ST22)"></div></div>
-            <div class="field-row"><span class="label">OEP-11: No. of Yard Tractor (Operate / Maintenance / Idle)</span><div class="input-area"><input type="text" name="oep11" placeholder="(e.g. 2 / 0 / 1)"></div></div>
+            <div class="field-row"><span class="label">OEP-10: Highway Tractor (ST#) in Maintenance</span><div class="input-area"><input type="text" name="oep10" placeholder="e.g. 11 23 -> ST11, ST23"></div></div>
+            <div class="field-row"><span class="label">OEP-11: No. of Yard Tractor (Operate / Maintenance / Idle)</span><div class="input-area"><input type="text" name="oep11" placeholder="e.g. 11 23 3 -> 11 / 23 / 3"></div></div>
             <div class="field-row"><span class="label">OEP-12: Trailer (C#) in Maintenance</span><div class="input-area"><input type="text" name="oep12" placeholder="(e.g. C22,C25)"></div></div>
             <div class="field-row"><span class="label">OEP-13: Cleanliness of Tractors and Trailers Body</span><div class="input-area"><select name="oep13"><option value="Y">Y</option><option value="N">N</option></select></div></div>
-            <div class="field-row"><span class="label">OEP-14: Bobcat / Sweeper / Scrubber Drier</span><div class="input-area"><input type="text" name="oep14" placeholder="(e.g. N / N / N)"></div></div>
+            <div class="field-row"><span class="label">OEP-14: Bobcat / Sweeper / Scrubber Drier</span><div class="input-area"><input type="text" name="oep14" placeholder="e.g. y n y -> Y / N / Y"></div></div>
             <div class="field-row"><span class="label">OEP-15: No. of backhoe loader (JCB) operate at tipping hall</span><div class="input-area"><input type="text" name="oep15" placeholder="(count)"></div></div>
             <div class="field-row"><span class="label">OEP-16: Storm Drain Channel / Catchpit Condition</span><div class="input-area"><select name="oep16"><option value="Y">Y (CLEAR)</option><option value="X">X (BLOCKED)</option></select></div></div>
             <div class="field-row"><span class="label">OEP-17: Wastewater Effluent Sample Collection</span><div class="input-area"><div class="input-group"><select name="oep17_lab"><option value="ALS">ALS</option><option value="EPD">EPD</option></select><input type="text" name="oep17_time" placeholder="Time (e.g. 1548)"></div></div></div>
@@ -233,120 +228,106 @@
 <script>
 // ============ 描述性表頭對應（Excel 導出時使用）============
 const HEADER_MAP = {
-    'inspection_date': 'Inspection Date',
-    'shift': 'Shift / Time',
-    'weather': 'Weather',
-    'inspected_by': 'Inspected By',
-    'checked_by': 'Inspection Form Checked By',
-    'field_01': '1. Industrial Water Meter Reading',
-    'field_02': '2. Waste Water Discharge Flow Meter Reading',
-    'field_03': '3. Weighbridge CPU',
-    'field_04a': '4. Status of Weighbridge No.1',
-    'field_04b': '4. Status of Weighbridge No.2',
-    'field_04c': '4. Status of Weighbridge No.3',
-    'field_05a': '5. Drop Barrier / Traffic Light No.1',
-    'field_05b': '5. Drop Barrier / Traffic Light No.2',
-    'field_05c': '5. Drop Barrier / Traffic Light No.3',
-    'field_06a': '6. CCTV No.1 (IN/OUT)',
-    'field_06b': '6. CCTV No.2 (IN/OUT)',
-    'field_06c': '6. CCTV No.3 (IN/OUT)',
-    'field_07': '7. No. of Weighbridge Operator',
-    'field_08': '8. VOID or MANUAL ticket',
-    'field_09': '9. Water Spraying / Brushing',
-    'field_10': '10. Drop Barrier / Traffic Light',
-    'field_11': '11. Recycling Water System Room',
-    'field_12a': '12. Live floor No.1',
-    'field_12b': '12. Live floor No.2',
-    'field_12c': '12. Live floor No.3',
-    'field_13a': '13. Ventilation Fan No.1',
-    'field_13b': '13. Ventilation Fan No.2',
-    'field_14a': '14A. No. of Control Operator',
-    'field_14b': '14B. No. of Tipper Hall Assistant',
-    'field_15': '15. Lighting',
-    'field_16a': '16. Traffic Light Indicator (Entrance)',
-    'field_16b': '16A. Unloading Bays (Front / Rear)',
-    'field_17': '17. Water Spray nozzles',
-    'field_18': '18. Bulky Waste Shredder',
-    'field_19': '19. Cleanliness of tipping area',
-    'field_20a': '20. Final Scrubber No.1',
-    'field_20b': '20. Final Scrubber No.2',
-    'field_20c': '20A. Data Logger (Final Scrubber)',
-    'field_21a': '21. Main Fan No.1',
-    'field_21b': '21. Main Fan No.2',
-    'field_21c': '21. Main Fan No.3',
-    'field_21d': '21A. Data Logger (Main Fan)',
-    'field_22a': '22. Compactor No.1',
-    'field_22b': '22. Compactor No.2',
-    'field_22c': '22. Compactor No.3',
-    'field_23a': '23. Chemicals Waste Storage (Properly stored)',
-    'field_23b': '23A. Chemicals Waste Storage (Any spillage)',
-    'field_24': '24. Lighting',
-    'field_25': '25. Filter Press Unit',
-    'field_26': '26. No. of Compactor Operator',
-    'field_26b': '26B. No. of Compactor Hall Assistant',
-    'field_27a': '27. Status of Aeration Tank SBR1',
-    'field_27b': '27. Status of Aeration Tank SBR2',
-    'field_28a': '28. Venturi Scrubber Pump P1',
-    'field_28b': '28. Venturi Scrubber Pump P2',
-    'field_29': '29. Filter Press Unit',
-    'field_30': '30. Lighting',
-    'field_31': '31. Buffer Tank with Wastewater',
-    'field_32': '32. Discharge of Wastewater',
-    'field_33': '33. Data Logger / Panel Display',
-    'field_34': '34. Record of Loaded Trailers - Compactor Hall',
-    'field_35': '35. Record of Loaded Trailers - Open Area',
-    'field_36': '36. Malpractice - By-pass Weighbridge',
-    'field_37': '37. Malpractice - By-pass Vehicle Wash',
-    'field_38': '38. Malpractice - Fast Speed',
-    'field_39': '39. Malpractice - Leachate Dripping',
-    'field_40': '40. CCTV - Main Entrance & Exit',
-    'field_41': '41. CCTV - Open Area around Weighbridges',
-    'field_42': '42. CCTV - Back Yard Area',
-    'field_43': '43. CCTV - Wastewater Treatment Plant',
-    'field_44': '44. CCTV - Compactor Hall',
-    'field_45': '45. CCTV - Workshop',
-    'field_46': '46. CCTV - Tipping Hall',
-    'oep1': 'OEP-1: Vehicle Turnaround Time > 25 min',
-    'oep2': 'OEP-2: Queuing of RCVs outside the Station',
-    'oep3': 'OEP-3: Vehicle Washing House',
-    'oep4': 'OEP-4: Spillage of Refuse at any External Location & Not Properly Removed within 30 min',
-    'oep5': 'OEP-5: Spillage of Refuse/Leakage of Leachate from Trailer',
-    'oep6': 'OEP-6: Abnormal Noise',
-    'oep7': 'OEP-7: Waste Inspection',
-    'oep8': 'OEP-8: Cleansing of the "Cleansing Area" (4 times per day)',
-    'oep9': 'OEP-9: No. of Highway Tractor (Operate / Idle)',
-    'oep10': 'OEP-10: Highway Tractor (ST#) in Maintenance',
-    'oep11': 'OEP-11: No. of Yard Tractor (Operate / Maintenance / Idle)',
-    'oep12': 'OEP-12: Trailer (C#) in Maintenance',
-    'oep13': 'OEP-13: Cleanliness of Tractors and Trailers Body',
-    'oep14': 'OEP-14: Bobcat / Sweeper / Scrubber Drier',
-    'oep15': 'OEP-15: No. of backhoe loader (JCB) operate at tipping hall',
-    'oep16': 'OEP-16: Storm Drain Channel / Catchpit Condition',
-    'oep17_lab': 'OEP-17: Wastewater Sample Lab',
-    'oep17_time': 'OEP-17: Wastewater Sample Time',
-    'oep18_lab': 'OEP-18: Storm Water Sample Lab',
-    'oep18_time': 'OEP-18: Storm Water Sample Time',
-    'oep19_time': 'OEP-19: Influent Sample Time',
-    'oep20_lab': 'OEP-20: Sludge Cake Lab',
-    'oep20_time': 'OEP-20: Sludge Cake Time',
-    'oep21_time': 'OEP-21: RSP Time',
-    'oep22_time': 'OEP-22: Noise Measurement Time',
-    'oep23_time': 'OEP-23: CO & NO2 Time',
-    'oep24_time': 'OEP-24: Odour Patrol Time',
-    'oep24_level': 'OEP-24: Mal-odour detected (0-4)',
-    'oep25_time': 'OEP-25: Pest/Rodent Breeding Places (Time)',
-    'oep26_time': 'OEP-26: Pest/Rodent Control Fogging Time',
-    'oep27_time': 'OEP-27: Black Smoke Time',
-    'oep28': 'OEP-28: Operation Manager',
-    'oep29': 'OEP-29: Officer / Guest Visited STTS',
-    'rcv_vehicle': 'RCV Vehicle No(s).',
-    'rcv_type': 'V Type',
-    'rcv_waste_type': 'Waste Type',
-    'rcv_ticket': 'TICKET NO.',
-    'rcv_container_clean': 'Container Cleaned',
-    'rcv_remarks': 'Spot Check Remarks',
+    'inspection_date': 'Inspection Date', 'shift': 'Shift / Time', 'weather': 'Weather',
+    'inspected_by': 'Inspected By', 'checked_by': 'Inspection Form Checked By',
+    'field_01': '1. Industrial Water Meter Reading', 'field_02': '2. Waste Water Discharge Flow Meter Reading',
+    'field_03': '3. Weighbridge CPU', 'field_04a': '4. Status of Weighbridge No.1', 'field_04b': '4. Status of Weighbridge No.2',
+    'field_04c': '4. Status of Weighbridge No.3', 'field_05a': '5. Drop Barrier / Traffic Light No.1',
+    'field_05b': '5. Drop Barrier / Traffic Light No.2', 'field_05c': '5. Drop Barrier / Traffic Light No.3',
+    'field_06a': '6. CCTV No.1 (IN/OUT)', 'field_06b': '6. CCTV No.2 (IN/OUT)', 'field_06c': '6. CCTV No.3 (IN/OUT)',
+    'field_07': '7. No. of Weighbridge Operator', 'field_08': '8. VOID or MANUAL ticket',
+    'field_09': '9. Water Spraying / Brushing', 'field_10': '10. Drop Barrier / Traffic Light',
+    'field_11': '11. Recycling Water System Room', 'field_12a': '12. Live floor No.1', 'field_12b': '12. Live floor No.2',
+    'field_12c': '12. Live floor No.3', 'field_13a': '13. Ventilation Fan No.1', 'field_13b': '13. Ventilation Fan No.2',
+    'field_14a': '14A. No. of Control Operator', 'field_14b': '14B. No. of Tipper Hall Assistant',
+    'field_15': '15. Lighting', 'field_16a': '16. Traffic Light Indicator (Entrance)',
+    'field_16b': '16A. Unloading Bays (Front / Rear)', 'field_17': '17. Water Spray nozzles',
+    'field_18': '18. Bulky Waste Shredder', 'field_19': '19. Cleanliness of tipping area',
+    'field_20a': '20. Final Scrubber No.1', 'field_20b': '20. Final Scrubber No.2', 'field_20c': '20A. Data Logger (Final Scrubber)',
+    'field_21a': '21. Main Fan No.1', 'field_21b': '21. Main Fan No.2', 'field_21c': '21. Main Fan No.3',
+    'field_21d': '21A. Data Logger (Main Fan)', 'field_22a': '22. Compactor No.1', 'field_22b': '22. Compactor No.2', 'field_22c': '22. Compactor No.3',
+    'field_23a': '23. Chemicals Waste Storage (Properly stored)', 'field_23b': '23A. Chemicals Waste Storage (Any spillage)',
+    'field_24': '24. Lighting', 'field_25': '25. Filter Press Unit', 'field_26': '26. No. of Compactor Operator',
+    'field_26b': '26B. No. of Compactor Hall Assistant', 'field_27a': '27. Status of Aeration Tank SBR1',
+    'field_27b': '27. Status of Aeration Tank SBR2', 'field_28a': '28. Venturi Scrubber Pump P1',
+    'field_28b': '28. Venturi Scrubber Pump P2', 'field_29': '29. Filter Press Unit', 'field_30': '30. Lighting',
+    'field_31': '31. Buffer Tank with Wastewater', 'field_32': '32. Discharge of Wastewater',
+    'field_33': '33. Data Logger / Panel Display', 'field_34': '34. Record of Loaded Trailers - Compactor Hall',
+    'field_35': '35. Record of Loaded Trailers - Open Area', 'field_36': '36. Malpractice - By-pass Weighbridge',
+    'field_37': '37. Malpractice - By-pass Vehicle Wash', 'field_38': '38. Malpractice - Fast Speed',
+    'field_39': '39. Malpractice - Leachate Dripping', 'field_40': '40. CCTV - Main Entrance & Exit',
+    'field_41': '41. CCTV - Open Area around Weighbridges', 'field_42': '42. CCTV - Back Yard Area',
+    'field_43': '43. CCTV - Wastewater Treatment Plant', 'field_44': '44. CCTV - Compactor Hall',
+    'field_45': '45. CCTV - Workshop', 'field_46': '46. CCTV - Tipping Hall',
+    'oep1': 'OEP-1: Vehicle Turnaround Time > 25 min', 'oep2': 'OEP-2: Queuing of RCVs outside the Station',
+    'oep3': 'OEP-3: Vehicle Washing House', 'oep4': 'OEP-4: Spillage of Refuse at any External Location & Not Properly Removed within 30 min',
+    'oep5': 'OEP-5: Spillage of Refuse/Leakage of Leachate from Trailer', 'oep6': 'OEP-6: Abnormal Noise',
+    'oep7': 'OEP-7: Waste Inspection', 'oep8': 'OEP-8: Cleansing of the "Cleansing Area" (4 times per day)',
+    'oep9': 'OEP-9: No. of Highway Tractor (Operate / Idle)', 'oep10': 'OEP-10: Highway Tractor (ST#) in Maintenance',
+    'oep11': 'OEP-11: No. of Yard Tractor (Operate / Maintenance / Idle)', 'oep12': 'OEP-12: Trailer (C#) in Maintenance',
+    'oep13': 'OEP-13: Cleanliness of Tractors and Trailers Body', 'oep14': 'OEP-14: Bobcat / Sweeper / Scrubber Drier',
+    'oep15': 'OEP-15: No. of backhoe loader (JCB) operate at tipping hall', 'oep16': 'OEP-16: Storm Drain Channel / Catchpit Condition',
+    'oep17_lab': 'OEP-17: Wastewater Sample Lab', 'oep17_time': 'OEP-17: Wastewater Sample Time',
+    'oep18_lab': 'OEP-18: Storm Water Sample Lab', 'oep18_time': 'OEP-18: Storm Water Sample Time',
+    'oep19_time': 'OEP-19: Influent Sample Time', 'oep20_lab': 'OEP-20: Sludge Cake Lab', 'oep20_time': 'OEP-20: Sludge Cake Time',
+    'oep21_time': 'OEP-21: RSP Time', 'oep22_time': 'OEP-22: Noise Measurement Time',
+    'oep23_time': 'OEP-23: CO & NO2 Time', 'oep24_time': 'OEP-24: Odour Patrol Time', 'oep24_level': 'OEP-24: Mal-odour detected (0-4)',
+    'oep25_time': 'OEP-25: Pest/Rodent Breeding Places (Time)', 'oep26_time': 'OEP-26: Pest/Rodent Control Fogging Time',
+    'oep27_time': 'OEP-27: Black Smoke Time', 'oep28': 'OEP-28: Operation Manager', 'oep29': 'OEP-29: Officer / Guest Visited STTS',
+    'rcv_vehicle': 'RCV Vehicle No(s).', 'rcv_type': 'V Type', 'rcv_waste_type': 'Waste Type',
+    'rcv_ticket': 'TICKET NO.', 'rcv_container_clean': 'Container Cleaned', 'rcv_remarks': 'Spot Check Remarks',
     'general_remarks': 'Remarks'
 };
+
+// ============ 智慧輸入轉換函數 ============
+// 日期格式化為 dd/mm/yyyy
+function formatDateToDMY(date) {
+    if (!date) return date;
+    let d = new Date(date);
+    if (isNaN(d.getTime())) return date;
+    let day = d.getDate().toString().padStart(2, '0');
+    let month = (d.getMonth() + 1).toString().padStart(2, '0');
+    let year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
+// 將輸入 "11 23" 轉為 "ST11, ST23" (全大寫)
+function formatHighwayTractor(val) {
+    if (!val) return val;
+    let parts = val.trim().split(/\s+/);
+    let formatted = parts.map(p => 'ST' + p).join(', ');
+    return formatted.toUpperCase();
+}
+
+// 將輸入 "11 23 3" 轉為 "11 / 23 / 3"
+function formatYardTractor(val) {
+    if (!val) return val;
+    let parts = val.trim().split(/\s+/);
+    let formatted = parts.join(' / ');
+    return formatted;
+}
+
+// 將輸入 "y n y" 轉為 "Y / N / Y"
+function formatBobcat(val) {
+    if (!val) return val;
+    let parts = val.trim().split(/\s+/);
+    let formatted = parts.map(p => p.toUpperCase()).join(' / ');
+    return formatted;
+}
+
+// 將輸入 "y na" 轉為 "Y / NA"
+function formatWaterSpray(val) {
+    if (!val) return val;
+    let parts = val.trim().split(/\s+/);
+    let formatted = parts.map(p => p.toUpperCase()).join(' / ');
+    return formatted;
+}
+
+// 將文字轉為全大寫（用於 RCV Vehicle No(s). 和 V Type）
+function toUpperCaseField(val) {
+    if (!val) return val;
+    return val.toUpperCase();
+}
 
 // ============ Smart Time Formatting ============
 function formatTime(input) {
@@ -395,6 +376,50 @@ function applySmartId(inputEl) {
 
 inspectedBy.addEventListener('blur', () => applySmartId(inspectedBy));
 checkedBy.addEventListener('blur', () => applySmartId(checkedBy));
+
+// ============ 為智慧輸入欄位綁定事件 ============
+const waterSprayField = document.querySelector('input[name="field_09"]');
+if (waterSprayField) {
+    waterSprayField.addEventListener('blur', function() {
+        if (this.value) this.value = formatWaterSpray(this.value);
+    });
+}
+
+const highwayTractorField = document.querySelector('input[name="oep10"]');
+if (highwayTractorField) {
+    highwayTractorField.addEventListener('blur', function() {
+        if (this.value) this.value = formatHighwayTractor(this.value);
+    });
+}
+
+const yardTractorField = document.querySelector('input[name="oep11"]');
+if (yardTractorField) {
+    yardTractorField.addEventListener('blur', function() {
+        if (this.value) this.value = formatYardTractor(this.value);
+    });
+}
+
+const bobcatField = document.querySelector('input[name="oep14"]');
+if (bobcatField) {
+    bobcatField.addEventListener('blur', function() {
+        if (this.value) this.value = formatBobcat(this.value);
+    });
+}
+
+// RCV Vehicle No(s). 和 V Type 轉為全大寫
+const rcvVehicleField = document.querySelector('input[name="rcv_vehicle"]');
+if (rcvVehicleField) {
+    rcvVehicleField.addEventListener('blur', function() {
+        if (this.value) this.value = toUpperCaseField(this.value);
+    });
+}
+
+const rcvTypeField = document.querySelector('input[name="rcv_type"]');
+if (rcvTypeField) {
+    rcvTypeField.addEventListener('blur', function() {
+        if (this.value) this.value = toUpperCaseField(this.value);
+    });
+}
 
 // ============ Capital Letter Logic ============
 function smartCapitalize(str) {
@@ -450,15 +475,15 @@ function clearForm() {
     const weatherSelect = document.getElementById('weatherSel');
     if (weatherSelect) weatherSelect.value = 'Sunny';
     
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('inspectDate').value = today;
+    const today = new Date();
+    document.getElementById('inspectDate').value = formatDateToDMY(today);
     
     localStorage.removeItem(DRAFT_KEY);
 }
 
 // ============ Export to Excel ============
 function exportToExcel() {
-    const date = document.getElementById('inspectDate').value;
+    const dateRaw = document.getElementById('inspectDate').value;
     const shift = document.getElementById('shiftSelect').value;
     const inspected = document.getElementById('inspectedBy').value.trim();
     const weather = document.getElementById('weatherSel').value;
@@ -468,7 +493,7 @@ function exportToExcel() {
         inspectedBy.focus();
         return;
     }
-    if (!date) {
+    if (!dateRaw) {
         alert('請選擇巡查日期');
         return;
     }
@@ -476,7 +501,7 @@ function exportToExcel() {
     const formData = collectFormData();
     
     const flat = {
-        inspection_date: date,
+        inspection_date: dateRaw,
         shift: shift,
         weather: weather,
         inspected_by: inspected,
@@ -504,9 +529,9 @@ function exportToExcel() {
     XLSX.utils.book_append_sheet(wb, ws, 'STTS_Inspection');
     
     const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
-    XLSX.writeFile(wb, `STTS_Inspection_${date}_${shift}_${timestamp}.xlsx`);
+    XLSX.writeFile(wb, `STTS_Inspection_${dateRaw}_${shift}_${timestamp}.xlsx`);
     
-    alert(`✅ 匯出成功！\n\n日期: ${date} | 班次: ${shift}\n檢查人員: ${inspected}\n\n表單已自動清空，可進行下一次檢查記錄。`);
+    alert(`✅ 匯出成功！\n\n日期: ${dateRaw} | 班次: ${shift}\n檢查人員: ${inspected}\n\n表單已自動清空，可進行下一次檢查記錄。`);
     
     clearForm();
 }
@@ -559,10 +584,9 @@ document.querySelectorAll('input, select, textarea').forEach(el => {
     el.addEventListener('change', autoSaveHandler);
 });
 
-const today = new Date().toISOString().split('T')[0];
-if (!document.getElementById('inspectDate').value) {
-    document.getElementById('inspectDate').value = today;
-}
+// 設定預設日期為今天 dd/mm/yyyy 格式
+const todayDate = new Date();
+document.getElementById('inspectDate').value = formatDateToDMY(todayDate);
 
 restoreDraft();
 
