@@ -78,7 +78,7 @@
     </div>
 
     <div class="meta-bar">
-        <div class="meta-item"><label>📅 INSPECTION DATE <span class="required-star">*</span></label><input type="text" id="inspectDate" placeholder="dd/mm/yyyy"></div>
+        <div class="meta-item"><label>📅 INSPECTION DATE <span class="required-star">*</span></label><input type="date" id="inspectDate"></div>
         <div class="meta-item"><label>👤 INSPECTED BY <span class="required-star">*</span></label><input type="text" id="inspectedBy" placeholder="(e.g. i21 or I(TD)21)"></div>
         <div class="meta-item"><label>⏱️ SHIFT / TIME <span class="required-star">*</span></label><select id="shiftSelect"><option value="08:00">08:00</option><option value="11:00">11:00</option><option value="13:00">13:00</option><option value="16:00">16:00</option><option value="19:00">19:00</option><option value="22:00">22:00</option></select></div>
         <div class="meta-item"><label>🌦️ WEATHER</label><select id="weatherSel"><option value="Sunny">Sunny</option><option value="Cloudy">Cloudy</option><option value="Fine">Fine</option><option value="Rainy">Rainy</option></select></div>
@@ -172,7 +172,7 @@
             <div class="field-row"><span class="label">OEP-6: Abnormal Noise</span><div class="input-area"><select name="oep6"><option value="N">N</option><option value="Y">Y</option></select></div></div>
             <div class="field-row"><span class="label">OEP-7: Waste Inspection</span><div class="input-area"><select name="oep7"><option value="N">N</option><option value="Y">Y</option></select></div></div>
             <div class="field-row"><span class="label">OEP-8: Cleansing of the "Cleansing Area" (4 times per day)</span><div class="input-area"><select name="oep8"><option value="Y">Y</option><option value="N">N</option></select></div></div>
-            <div class="field-row"><span class="label">OEP-9: No. of Highway Tractor (Operate / Idle)</span><div class="input-area"><input type="text" name="oep9" placeholder="(e.g. 16 / 8)"></div></div>
+            <div class="field-row"><span class="label">OEP-9: No. of Highway Tractor (Operate / Idle)</span><div class="input-area"><input type="text" name="oep9" placeholder="(e.g. 3 3 -> 3 / 3)"></div></div>
             <div class="field-row"><span class="label">OEP-10: Highway Tractor (ST#) in Maintenance</span><div class="input-area"><input type="text" name="oep10" placeholder="e.g. 11 23 -> ST11, ST23"></div></div>
             <div class="field-row"><span class="label">OEP-11: No. of Yard Tractor (Operate / Maintenance / Idle)</span><div class="input-area"><input type="text" name="oep11" placeholder="e.g. 11 23 3 -> 11 / 23 / 3"></div></div>
             <div class="field-row"><span class="label">OEP-12: Trailer (C#) in Maintenance</span><div class="input-area"><input type="text" name="oep12" placeholder="(e.g. C22,C25)"></div></div>
