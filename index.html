@@ -280,15 +280,12 @@ const HEADER_MAP = {
 };
 
 // ============ 智慧輸入轉換函數 ============
-// 日期格式化為 dd/mm/yyyy
-function formatDateToDMY(date) {
-    if (!date) return date;
-    let d = new Date(date);
-    if (isNaN(d.getTime())) return date;
-    let day = d.getDate().toString().padStart(2, '0');
-    let month = (d.getMonth() + 1).toString().padStart(2, '0');
-    let year = d.getFullYear();
-    return `${day}/${month}/${year}`;
+// 將輸入 "3 3" 轉為 "3 / 3" (OEP-9: Highway Tractor Operate/Idle)
+function formatHighwayOperateIdle(val) {
+    if (!val) return val;
+    let parts = val.trim().split(/\s+/);
+    let formatted = parts.join(' / ');
+    return formatted;
 }
 
 // 將輸入 "11 23" 轉為 "ST11, ST23" (全大寫)
@@ -296,6 +293,14 @@ function formatHighwayTractor(val) {
     if (!val) return val;
     let parts = val.trim().split(/\s+/);
     let formatted = parts.map(p => 'ST' + p).join(', ');
+    return formatted.toUpperCase();
+}
+
+// 將輸入 "11 23" 轉為 "C11, C23" (OEP-12: Trailer C# in Maintenance)
+function formatTrailer(val) {
+    if (!val) return val;
+    let parts = val.trim().split(/\s+/);
+    let formatted = parts.map(p => 'C' + p).join(', ');
     return formatted.toUpperCase();
 }
 
@@ -385,6 +390,13 @@ if (waterSprayField) {
     });
 }
 
+const highwayOperateIdleField = document.querySelector('input[name="oep9"]');
+if (highwayOperateIdleField) {
+    highwayOperateIdleField.addEventListener('blur', function() {
+        if (this.value) this.value = formatHighwayOperateIdle(this.value);
+    });
+}
+
 const highwayTractorField = document.querySelector('input[name="oep10"]');
 if (highwayTractorField) {
     highwayTractorField.addEventListener('blur', function() {
@@ -396,6 +408,13 @@ const yardTractorField = document.querySelector('input[name="oep11"]');
 if (yardTractorField) {
     yardTractorField.addEventListener('blur', function() {
         if (this.value) this.value = formatYardTractor(this.value);
+    });
+}
+
+const trailerField = document.querySelector('input[name="oep12"]');
+if (trailerField) {
+    trailerField.addEventListener('blur', function() {
+        if (this.value) this.value = formatTrailer(this.value);
     });
 }
 
@@ -424,7 +443,7 @@ if (rcvTypeField) {
 // ============ Capital Letter Logic ============
 function smartCapitalize(str) {
     if (!str) return str;
-    const keepUpper = ['CCTV', 'ID', 'RCV', 'CPU', 'VWP', 'SCADA', 'PPE', 'JCB', 'CO', 'NO2', 'RSP', 'UV', 'ALS', 'EPD', 'TD', 'SI', 'I', 'SBR', 'ST'];
+    const keepUpper = ['CCTV', 'ID', 'RCV', 'CPU', 'VWP', 'SCADA', 'PPE', 'JCB', 'CO', 'NO2', 'RSP', 'UV', 'ALS', 'EPD', 'TD', 'SI', 'I', 'SBR', 'ST', 'C'];
     let words = str.split(' ');
     let result = words.map(word => {
         let upperWord = word.toUpperCase();
@@ -439,6 +458,23 @@ document.querySelectorAll('input[type="text"], textarea').forEach(el => {
     if (el.id !== 'inspectedBy' && el.id !== 'checkedBy' && !el.name.includes('_time') && el.name !== 'oep24_time' && !el.name.includes('_lab')) {
         el.addEventListener('blur', function() { if (this.value) this.value = smartCapitalize(this.value); });
     }
+});
+
+// ============ 按 Enter 鍵跳到下一個欄位 ============
+function handleEnterKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const form = document.getElementById('inspectionForm');
+        const focusable = form.querySelectorAll('input, select, textarea, button');
+        let index = Array.prototype.indexOf.call(focusable, e.target);
+        if (index !== -1 && index + 1 < focusable.length) {
+            focusable[index + 1].focus();
+        }
+    }
+}
+
+document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('keydown', handleEnterKey);
 });
 
 // ============ Collect Form Data ============
@@ -475,15 +511,12 @@ function clearForm() {
     const weatherSelect = document.getElementById('weatherSel');
     if (weatherSelect) weatherSelect.value = 'Sunny';
     
-    const today = new Date();
-    document.getElementById('inspectDate').value = formatDateToDMY(today);
-    
     localStorage.removeItem(DRAFT_KEY);
 }
 
 // ============ Export to Excel ============
 function exportToExcel() {
-    const dateRaw = document.getElementById('inspectDate').value;
+    const date = document.getElementById('inspectDate').value;
     const shift = document.getElementById('shiftSelect').value;
     const inspected = document.getElementById('inspectedBy').value.trim();
     const weather = document.getElementById('weatherSel').value;
@@ -493,7 +526,7 @@ function exportToExcel() {
         inspectedBy.focus();
         return;
     }
-    if (!dateRaw) {
+    if (!date) {
         alert('請選擇巡查日期');
         return;
     }
@@ -501,7 +534,7 @@ function exportToExcel() {
     const formData = collectFormData();
     
     const flat = {
-        inspection_date: dateRaw,
+        inspection_date: date,
         shift: shift,
         weather: weather,
         inspected_by: inspected,
@@ -529,9 +562,9 @@ function exportToExcel() {
     XLSX.utils.book_append_sheet(wb, ws, 'STTS_Inspection');
     
     const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
-    XLSX.writeFile(wb, `STTS_Inspection_${dateRaw}_${shift}_${timestamp}.xlsx`);
+    XLSX.writeFile(wb, `STTS_Inspection_${date}_${shift}_${timestamp}.xlsx`);
     
-    alert(`✅ 匯出成功！\n\n日期: ${dateRaw} | 班次: ${shift}\n檢查人員: ${inspected}\n\n表單已自動清空，可進行下一次檢查記錄。`);
+    alert(`✅ 匯出成功！\n\n日期: ${date} | 班次: ${shift}\n檢查人員: ${inspected}\n\n表單已自動清空，可進行下一次檢查記錄。`);
     
     clearForm();
 }
@@ -584,9 +617,11 @@ document.querySelectorAll('input, select, textarea').forEach(el => {
     el.addEventListener('change', autoSaveHandler);
 });
 
-// 設定預設日期為今天 dd/mm/yyyy 格式
-const todayDate = new Date();
-document.getElementById('inspectDate').value = formatDateToDMY(todayDate);
+// 設定預設日期為今天
+const today = new Date().toISOString().split('T')[0];
+if (!document.getElementById('inspectDate').value) {
+    document.getElementById('inspectDate').value = today;
+}
 
 restoreDraft();
 
