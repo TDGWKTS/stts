@@ -296,7 +296,7 @@ function formatHighwayTractor(val) {
     return formatted.toUpperCase();
 }
 
-// 將輸入 "11 23" 轉為 "C11, C23" (OEP-12: Trailer C# in Maintenance)
+// 將輸入 "11 23" 轉為 "C11, C23" (OEP-12: Trailer C# in Maintenance) 全大寫
 function formatTrailer(val) {
     if (!val) return val;
     let parts = val.trim().split(/\s+/);
@@ -440,7 +440,7 @@ if (rcvTypeField) {
     });
 }
 
-// ============ Capital Letter Logic ============
+// ============ Capital Letter Logic (跳過智慧輸入欄位) ============
 function smartCapitalize(str) {
     if (!str) return str;
     const keepUpper = ['CCTV', 'ID', 'RCV', 'CPU', 'VWP', 'SCADA', 'PPE', 'JCB', 'CO', 'NO2', 'RSP', 'UV', 'ALS', 'EPD', 'TD', 'SI', 'I', 'SBR', 'ST', 'C'];
@@ -454,9 +454,16 @@ function smartCapitalize(str) {
     return result.join(' ');
 }
 
+// 需要跳過 smartCapitalize 的欄位名稱（避免覆蓋智慧轉換結果）
+const skipCapitalizeNames = ['oep9', 'oep10', 'oep11', 'oep12', 'oep14', 'field_09', 'rcv_vehicle', 'rcv_type'];
+
 document.querySelectorAll('input[type="text"], textarea').forEach(el => {
     if (el.id !== 'inspectedBy' && el.id !== 'checkedBy' && !el.name.includes('_time') && el.name !== 'oep24_time' && !el.name.includes('_lab')) {
-        el.addEventListener('blur', function() { if (this.value) this.value = smartCapitalize(this.value); });
+        // 跳過智慧輸入欄位
+        if (skipCapitalizeNames.includes(el.name)) return;
+        el.addEventListener('blur', function() { 
+            if (this.value) this.value = smartCapitalize(this.value); 
+        });
     }
 });
 
@@ -627,5 +634,3 @@ restoreDraft();
 
 document.getElementById('exportBtn').addEventListener('click', exportToExcel);
 </script>
-</body>
-</html>
