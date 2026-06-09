@@ -226,6 +226,134 @@
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
+console.log('🚀 STTS FORM - MANUAL SYNC ONLY');
+
+// ============ Cloudflare R2 Configuration ============
+const STATION_ID = 'stts';
+const WORKER_URL = 'https://inspection-sync.tdgwkts.workers.dev';
+const DRAFT_KEY = 'STTS_CURRENT_DRAFT_V2';
+
+// ============ IndexedDB Setup ============
+let db = null;
+let syncDB = null;
+
+function initDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open('STTS_InspectionDB', 1);
+        request.onupgradeneeded = (e) => {
+            db = e.target.result;
+            if (!db.objectStoreNames.contains('inspections')) {
+                db.createObjectStore('inspections', { keyPath: 'timestamp' });
+            }
+        };
+        request.onsuccess = (e) => { db = e.target.result; resolve(db); };
+        request.onerror = (e) => reject(e.target.error);
+    });
+}
+
+function initSyncDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open('STTS_SyncDB', 1);
+        request.onupgradeneeded = (e) => {
+            syncDB = e.target.result;
+            if (!syncDB.objectStoreNames.contains('pending')) {
+                syncDB.createObjectStore('pending', { keyPath: 'id' });
+            }
+        };
+        request.onsuccess = (e) => { syncDB = e.target.result; resolve(syncDB); };
+        request.onerror = (e) => reject(e.target.error);
+    });
+}
+
+function generateSessionId() {
+    const now = new Date();
+    const dateStr = now.toISOString().split('T')[0];
+    const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '');
+    return `${STATION_ID}_${dateStr}_${timeStr}_${Math.random().toString(36).substr(2, 8)}`;
+}
+
+async function saveToMainDB(data) {
+    return new Promise((resolve, reject) => {
+        if (!db) reject(new Error('Database not initialized'));
+        const tx = db.transaction('inspections', 'readwrite');
+        const store = tx.objectStore('inspections');
+        store.add({ ...data, timestamp: new Date().toISOString() }).onsuccess = resolve;
+        store.onerror = (e) => reject(e.target.error);
+    });
+}
+
+async function saveToSyncDB(data) {
+    return new Promise((resolve, reject) => {
+        if (!syncDB) reject(new Error('Sync DB not initialized'));
+        const record = { id: generateSessionId(), data: data, timestamp: new Date().toISOString() };
+        const tx = syncDB.transaction('pending', 'readwrite');
+        const store = tx.objectStore('pending');
+        store.add(record).onsuccess = () => resolve(record.id);
+        store.onerror = (e) => reject(e.target.error);
+    });
+}
+
+async function syncToCloud(record) {
+    try {
+        const response = await fetch(`${WORKER_URL}/api/sync/${STATION_ID}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ stationId: STATION_ID, inspectionId: record.id, data: record.data, timestamp: record.timestamp })
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const result = await response.json();
+        return { success: result.success };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+async function syncAllPending() {
+    if (!syncDB) return { synced: 0, failed: 0 };
+    const tx = syncDB.transaction('pending', 'readonly');
+    const store = tx.objectStore('pending');
+    const records = await new Promise((resolve) => { store.getAll().onsuccess = (e) => resolve(e.target.result); });
+    if (records.length === 0) return { synced: 0, failed: 0 };
+    let synced = 0, failed = 0;
+    for (const record of records) {
+        const result = await syncToCloud(record);
+        if (result.success) {
+            synced++;
+            const deleteTx = syncDB.transaction('pending', 'readwrite');
+            deleteTx.objectStore('pending').delete(record.id);
+        } else { failed++; }
+    }
+    return { synced, failed, total: records.length };
+}
+
+function showSyncStatus(message, isError = false) {
+    let statusDiv = document.getElementById('syncStatus');
+    if (!statusDiv) {
+        statusDiv = document.createElement('div');
+        statusDiv.id = 'syncStatus';
+        statusDiv.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: #059669;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: monospace;
+            max-width: 350px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none;
+        `;
+        document.body.appendChild(statusDiv);
+    }
+    statusDiv.textContent = message;
+    statusDiv.style.backgroundColor = isError ? '#dc2626' : '#059669';
+    statusDiv.style.display = 'block';
+    setTimeout(() => { statusDiv.style.display = 'none'; }, 4000);
+}
+
 // ============ 描述性表頭對應（Excel 導出時使用）============
 const HEADER_MAP = {
     'inspection_date': 'Inspection Date', 'shift': 'Shift / Time', 'weather': 'Weather',
@@ -280,7 +408,6 @@ const HEADER_MAP = {
 };
 
 // ============ 智慧輸入轉換函數 ============
-// 將輸入 "3 3" 轉為 "3 / 3" (OEP-9: Highway Tractor Operate/Idle)
 function formatHighwayOperateIdle(val) {
     if (!val) return val;
     let parts = val.trim().split(/\s+/);
@@ -288,7 +415,6 @@ function formatHighwayOperateIdle(val) {
     return formatted;
 }
 
-// 將輸入 "11 23" 轉為 "ST11, ST23" (全大寫)
 function formatHighwayTractor(val) {
     if (!val) return val;
     let parts = val.trim().split(/\s+/);
@@ -296,7 +422,6 @@ function formatHighwayTractor(val) {
     return formatted.toUpperCase();
 }
 
-// 將輸入 "11 23" 轉為 "C11, C23" (OEP-12: Trailer C# in Maintenance) 全大寫
 function formatTrailer(val) {
     if (!val) return val;
     let parts = val.trim().split(/\s+/);
@@ -304,7 +429,6 @@ function formatTrailer(val) {
     return formatted.toUpperCase();
 }
 
-// 將輸入 "11 23 3" 轉為 "11 / 23 / 3"
 function formatYardTractor(val) {
     if (!val) return val;
     let parts = val.trim().split(/\s+/);
@@ -312,7 +436,6 @@ function formatYardTractor(val) {
     return formatted;
 }
 
-// 將輸入 "y n y" 轉為 "Y / N / Y"
 function formatBobcat(val) {
     if (!val) return val;
     let parts = val.trim().split(/\s+/);
@@ -320,7 +443,6 @@ function formatBobcat(val) {
     return formatted;
 }
 
-// 將輸入 "y na" 轉為 "Y / NA"
 function formatWaterSpray(val) {
     if (!val) return val;
     let parts = val.trim().split(/\s+/);
@@ -328,13 +450,11 @@ function formatWaterSpray(val) {
     return formatted;
 }
 
-// 將文字轉為全大寫（用於 RCV Vehicle No(s). 和 V Type）
 function toUpperCaseField(val) {
     if (!val) return val;
     return val.toUpperCase();
 }
 
-// ============ Smart Time Formatting ============
 function formatTime(input) {
     if (!input) return input;
     let str = input.toString().trim();
@@ -354,7 +474,6 @@ document.querySelectorAll('input[name$="_time"], input[name*="time"]').forEach(e
 const oep24Time = document.querySelector('input[name="oep24_time"]');
 if (oep24Time) oep24Time.addEventListener('blur', () => formatTimeOnBlur(oep24Time));
 
-// ============ Smart ID Conversion ============
 function smartIdFormat(val) {
     if (!val || !val.trim()) return val;
     let v = val.trim().toUpperCase();
@@ -379,10 +498,9 @@ function applySmartId(inputEl) {
     if (inputEl.value && inputEl.value.trim()) inputEl.value = smartIdFormat(inputEl.value);
 }
 
-inspectedBy.addEventListener('blur', () => applySmartId(inspectedBy));
-checkedBy.addEventListener('blur', () => applySmartId(checkedBy));
+if (inspectedBy) inspectedBy.addEventListener('blur', () => applySmartId(inspectedBy));
+if (checkedBy) checkedBy.addEventListener('blur', () => applySmartId(checkedBy));
 
-// ============ 為智慧輸入欄位綁定事件 ============
 const waterSprayField = document.querySelector('input[name="field_09"]');
 if (waterSprayField) {
     waterSprayField.addEventListener('blur', function() {
@@ -425,7 +543,6 @@ if (bobcatField) {
     });
 }
 
-// RCV Vehicle No(s). 和 V Type 轉為全大寫
 const rcvVehicleField = document.querySelector('input[name="rcv_vehicle"]');
 if (rcvVehicleField) {
     rcvVehicleField.addEventListener('blur', function() {
@@ -440,7 +557,6 @@ if (rcvTypeField) {
     });
 }
 
-// ============ Capital Letter Logic (跳過智慧輸入欄位) ============
 function smartCapitalize(str) {
     if (!str) return str;
     const keepUpper = ['CCTV', 'ID', 'RCV', 'CPU', 'VWP', 'SCADA', 'PPE', 'JCB', 'CO', 'NO2', 'RSP', 'UV', 'ALS', 'EPD', 'TD', 'SI', 'I', 'SBR', 'ST', 'C'];
@@ -454,12 +570,10 @@ function smartCapitalize(str) {
     return result.join(' ');
 }
 
-// 需要跳過 smartCapitalize 的欄位名稱（避免覆蓋智慧轉換結果）
 const skipCapitalizeNames = ['oep9', 'oep10', 'oep11', 'oep12', 'oep14', 'field_09', 'rcv_vehicle', 'rcv_type'];
 
 document.querySelectorAll('input[type="text"], textarea').forEach(el => {
     if (el.id !== 'inspectedBy' && el.id !== 'checkedBy' && !el.name.includes('_time') && el.name !== 'oep24_time' && !el.name.includes('_lab')) {
-        // 跳過智慧輸入欄位
         if (skipCapitalizeNames.includes(el.name)) return;
         el.addEventListener('blur', function() { 
             if (this.value) this.value = smartCapitalize(this.value); 
@@ -467,7 +581,6 @@ document.querySelectorAll('input[type="text"], textarea').forEach(el => {
     }
 });
 
-// ============ 按 Enter 鍵跳到下一個欄位 ============
 function handleEnterKey(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -484,7 +597,6 @@ document.querySelectorAll('input, select, textarea').forEach(el => {
     el.addEventListener('keydown', handleEnterKey);
 });
 
-// ============ Collect Form Data ============
 function collectFormData() {
     const form = document.getElementById('inspectionForm');
     const elements = form.elements;
@@ -496,13 +608,44 @@ function collectFormData() {
     return data;
 }
 
-// ============ Clear Form ============
+function collectFormDataForExport() {
+    const date = document.getElementById('inspectDate').value;
+    const shift = document.getElementById('shiftSelect').value;
+    const inspected = document.getElementById('inspectedBy').value.trim();
+    const weather = document.getElementById('weatherSel').value;
+    const checked = document.getElementById('checkedBy').value.trim();
+    const formData = collectFormData();
+    
+    const flat = {
+        inspection_date: date,
+        shift: shift,
+        weather: weather,
+        inspected_by: inspected,
+        checked_by: checked,
+        timestamp: new Date().toISOString(),
+        ...formData
+    };
+    
+    const excelData = {};
+    for (const [key, headerName] of Object.entries(HEADER_MAP)) {
+        excelData[headerName] = flat[key] !== undefined ? flat[key] : '';
+    }
+    
+    for (const [key, value] of Object.entries(flat)) {
+        if (!HEADER_MAP[key]) {
+            excelData[key] = value;
+        }
+    }
+    
+    return excelData;
+}
+
 function clearForm() {
     document.querySelectorAll('input[type="text"], textarea').forEach(el => {
         if (el.id !== 'inspectedBy' && el.id !== 'checkedBy') el.value = '';
     });
-    document.getElementById('inspectedBy').value = '';
-    document.getElementById('checkedBy').value = '';
+    if (inspectedBy) inspectedBy.value = '';
+    if (checkedBy) checkedBy.value = '';
     
     document.querySelectorAll('select').forEach(select => {
         const options = select.options;
@@ -521,8 +664,8 @@ function clearForm() {
     localStorage.removeItem(DRAFT_KEY);
 }
 
-// ============ Export to Excel ============
-function exportToExcel() {
+// ============ EXPORT & SYNC (MANUAL ONLY) ============
+async function exportAndSync() {
     const date = document.getElementById('inspectDate').value;
     const shift = document.getElementById('shiftSelect').value;
     const inspected = document.getElementById('inspectedBy').value.trim();
@@ -530,7 +673,7 @@ function exportToExcel() {
 
     if (!inspected) {
         alert('請填寫檢查人員姓名或編號 (Inspected By)');
-        inspectedBy.focus();
+        if (inspectedBy) inspectedBy.focus();
         return;
     }
     if (!date) {
@@ -538,60 +681,73 @@ function exportToExcel() {
         return;
     }
 
-    const formData = collectFormData();
+    showSyncStatus('📤 Exporting and syncing...');
     
-    const flat = {
-        inspection_date: date,
-        shift: shift,
-        weather: weather,
-        inspected_by: inspected,
-        checked_by: document.getElementById('checkedBy').value.trim(),
-        ...formData
-    };
-    
-    const headers = [];
-    const rowData = [];
-    
-    for (const [key, headerName] of Object.entries(HEADER_MAP)) {
-        headers.push(headerName);
-        rowData.push(flat[key] !== undefined ? flat[key] : '');
-    }
-    
-    for (const [key, value] of Object.entries(flat)) {
-        if (!HEADER_MAP[key]) {
-            headers.push(key);
-            rowData.push(value);
+    try {
+        const excelData = collectFormDataForExport();
+        
+        // Save to main DB (browser storage only)
+        await saveToMainDB(excelData);
+        
+        // Save to sync DB temporarily for R2 upload
+        await saveToSyncDB(excelData);
+        
+        // Sync to Cloudflare R2 (only happens when user clicks export)
+        const result = await syncAllPending();
+        
+        if (result.synced > 0) {
+            showSyncStatus(`✅ Synced ${result.synced} record(s) to Cloudflare R2`, false);
         }
+        
+        if (result.failed > 0) {
+            showSyncStatus(`⚠️ ${result.failed} record(s) failed to sync`, true);
+        }
+        
+        // Generate Excel file
+        const headers = Object.keys(excelData);
+        const rowData = Object.values(excelData);
+        
+        const ws = XLSX.utils.aoa_to_sheet([headers, rowData]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'STTS_Inspection');
+        
+        const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
+        const filename = `STTS_Inspection_${date}_${shift}_${inspected}_${timestamp}.xlsx`;
+        XLSX.writeFile(wb, filename);
+        
+        showSyncStatus(`✅ Excel exported! Clearing form...`);
+        
+        clearForm();
+        
+        // Reset date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('inspectDate').value = today;
+        
+        showSyncStatus(`✅ Export & sync complete! Ready for next inspection.`);
+        
+    } catch (error) {
+        console.error('Export error:', error);
+        showSyncStatus(`❌ Failed: ${error.message}`, true);
     }
-    
-    const ws = XLSX.utils.aoa_to_sheet([headers, rowData]);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'STTS_Inspection');
-    
-    const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
-    XLSX.writeFile(wb, `STTS_Inspection_${date}_${shift}_${timestamp}.xlsx`);
-    
-    alert(`✅ 匯出成功！\n\n日期: ${date} | 班次: ${shift}\n檢查人員: ${inspected}\n\n表單已自動清空，可進行下一次檢查記錄。`);
-    
-    clearForm();
 }
 
-// ============ Auto-save Draft ============
-const DRAFT_KEY = 'STTS_CURRENT_DRAFT';
+// ============ Auto-save Draft (Browser only, no sync) ============
 function saveDraft() {
     const draft = {
         date: document.getElementById('inspectDate').value,
         shift: document.getElementById('shiftSelect').value,
         weather: document.getElementById('weatherSel').value,
-        inspected: document.getElementById('inspectedBy').value,
-        checked: document.getElementById('checkedBy').value,
+        inspected: inspectedBy ? inspectedBy.value : '',
+        checked: checkedBy ? checkedBy.value : '',
         form: collectFormData(),
         timestamp: new Date().toISOString()
     };
     localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
     const badge = document.getElementById('autoSaveBadge');
-    badge.innerHTML = '💾 Draft saved';
-    setTimeout(() => badge.innerHTML = '💾 Auto-saved', 1500);
+    if (badge) {
+        badge.innerHTML = '💾 Draft saved';
+        setTimeout(() => badge.innerHTML = '💾 Auto-saved', 1500);
+    }
 }
 
 function restoreDraft() {
@@ -602,15 +758,15 @@ function restoreDraft() {
         if (draft.date) document.getElementById('inspectDate').value = draft.date;
         if (draft.shift) document.getElementById('shiftSelect').value = draft.shift;
         if (draft.weather) document.getElementById('weatherSel').value = draft.weather;
-        if (draft.inspected) document.getElementById('inspectedBy').value = draft.inspected;
-        if (draft.checked) document.getElementById('checkedBy').value = draft.checked;
+        if (draft.inspected && inspectedBy) inspectedBy.value = draft.inspected;
+        if (draft.checked && checkedBy) checkedBy.value = draft.checked;
         if (draft.form) {
             for (const [name, value] of Object.entries(draft.form)) {
                 const el = document.querySelector(`[name="${name}"]`);
                 if (el) el.value = value;
             }
         }
-    } catch(e) {}
+    } catch(e) { console.log('Restore draft error:', e); }
 }
 
 let draftTimer;
@@ -619,18 +775,36 @@ function autoSaveHandler() {
     draftTimer = setTimeout(saveDraft, 500);
 }
 
-document.querySelectorAll('input, select, textarea').forEach(el => {
-    el.addEventListener('input', autoSaveHandler);
-    el.addEventListener('change', autoSaveHandler);
+// ============ Initialize ============
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('📄 Initializing STTS - Manual Sync Only...');
+    
+    await initDB();
+    await initSyncDB();
+    console.log('✅ IndexedDB ready');
+    
+    const today = new Date().toISOString().split('T')[0];
+    if (!document.getElementById('inspectDate').value) {
+        document.getElementById('inspectDate').value = today;
+    }
+    
+    restoreDraft();
+    
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+        el.addEventListener('input', autoSaveHandler);
+        el.addEventListener('change', autoSaveHandler);
+    });
+    
+    // Message when coming back online - no auto-sync
+    window.addEventListener('online', () => {
+        showSyncStatus('🔄 Connection restored. Data will sync when you click EXPORT button.', false);
+    });
+    
+    console.log('✅ All ready! Data auto-saves to browser only. Sync to R2 only on EXPORT.');
 });
 
-// 設定預設日期為今天
-const today = new Date().toISOString().split('T')[0];
-if (!document.getElementById('inspectDate').value) {
-    document.getElementById('inspectDate').value = today;
+const exportBtn = document.getElementById('exportBtn');
+if (exportBtn) {
+    exportBtn.addEventListener('click', exportAndSync);
 }
-
-restoreDraft();
-
-document.getElementById('exportBtn').addEventListener('click', exportToExcel);
 </script>
